@@ -1,8 +1,8 @@
 # Evently
 
-# Project Structure
+## Project Structure
 
-## Backend (Django)
+### Backend (Django)
 
 - Set up a Django project and application for handling events.
 - Create models for Events and Users (if implementing authentication).
@@ -12,7 +12,7 @@
   - Calendar API (e.g., Google Calendar) for calendar functionality.
 - Implement authentication (using Django's built-in authentication system or a third-party library like Django Rest Framework JWT).
 
-## Frontend (React)
+### Frontend (React)
 
 - Set up a React project.
 - Create components for Event creation, modification, deletion, and display.

@@ -1,21 +1,31 @@
 # Evently
 
-## Project Structure
+## Overview
+Evenly is a web application built for managing events and guest lists, inspired by Partiful. It provides CRUD functionality for events and their guests, integrates with third-party APIs, and includes user authentication.
 
-### Backend (Django)
+## Requirements Recap:
 
-- Set up a Django project and application for handling events.
-- Create models for Events and Users (if implementing authentication).
-- Implement RESTful API endpoints for CRUD operations on Events.
-- Integrate 3rd party APIs:
-  - Google Maps API for location and directions.
-  - Calendar API (e.g., Google Calendar) for calendar functionality.
-- Implement authentication (using Django's built-in authentication system or a third-party library like Django Rest Framework JWT).
+- Backend: Django
+- Frontend: React
+- CRUD resources: Events, Guests
+- 3rd Party APIs: At least 2
+- Authentication: Django Rest Framework Token Authentication
+- Deployment: AWS
 
-### Frontend (React)
+## Features
+- **Event Management:**
+  - Create, Read, Update, Delete (CRUD) operations for events.
+  - Events have a title, description, date, location, and associated host (user).
+- **Guest Management:**
+  - Guests can be added to events with their name and email address.
+- **Authentication:**
+  - Token-based authentication using Django REST Framework's Token Authentication.
+- **Third-Party APIs:**
+  - Integration with at least two third-party APIs for enhanced functionality (e.g., Google Maps API for event locations, Eventbrite API for event details).
+- **Additional Features:**
+  - Search events and filter results.
+  - Provide alerts for event updates and invitations.
 
-- Set up a React project.
-- Create components for Event creation, modification, deletion, and display.
-- Integrate with the backend API to fetch and manipulate event data.
-- Use a library like FullCalendar for displaying events in a calendar view.
-- Integrate with the Google Maps API for displaying locations and directions.
+#### Database Schema
+
+![Database Schema](backend/db_schema.png)

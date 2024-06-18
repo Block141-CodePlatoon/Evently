@@ -28,4 +28,4 @@ Evenly is a web application built for managing events and guest lists, inspired 
 
 #### Database Schema
 
-![Database Schema](backend/db_schema.png)
+<!-- ![Database Schema](backend/db_schema.png) -->

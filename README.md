@@ -29,3 +29,33 @@ Evenly is a web application built for managing events and guest lists, inspired 
 #### Database Schema
 
 ![Database Schema](backend/db_schema.png)
+
+
+## Project Setup
+
+1. **Forking the Repository:**
+   - Visit the project repository on GitHub and fork to create to create a copy in your own GitHub account.
+
+2. **Backend (Django):**
+   - **Navigate to the Backend Directory:**
+     ```bash
+     cd backend
+     ```
+   - **Start the Server:**
+     ```bash
+     docker-compose up --build
+     ```
+
+3. **Frontend (React):**
+   - **Navigate to the Frontend Directory:**
+     ```bash
+     cd frontend
+     ```
+   - **Install Dependencies:**
+     ```bash
+     npm install
+     ```
+   - **Start the Development Server:**
+     ```bash
+     npm run dev
+     ```

@@ -11,10 +11,3 @@ class Event(models.Model):
     def __str__(self):
         return self.title
     
-class Guest(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    event = models.ForeignKey(Event, related_name='guests', on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.name

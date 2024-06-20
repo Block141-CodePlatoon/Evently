@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'events',
+    'guests',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ORIGIN = True
 
 ROOT_URLCONF = 'evently.urls'
 
@@ -97,8 +98,13 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
 }
+
+
 
 
 # Password validation

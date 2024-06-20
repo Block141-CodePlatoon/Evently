@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.urls import path, include  # Include the 'include' function
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('event.urls')),  # Include URLs from the 'event' app
+    path('api/', include('events.urls')),
+    path('api/', include('guests.urls')),
 ]

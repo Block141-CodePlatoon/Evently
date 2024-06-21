@@ -1,6 +1,6 @@
 from django.db import models
 from events.models import Event
-    
+
 class Guest(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()

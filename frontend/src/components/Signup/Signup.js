@@ -4,21 +4,20 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from '../../axiosSetup'; // Ensure this path is correct
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="#">
         Evently
       </Link>{' '}
       {new Date().getFullYear()}
@@ -30,19 +29,46 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const navigate = useNavigate();  // Initialize useNavigate
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    const credentials = {
+      username: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    console.log('Form data:', data);
+    console.log('Credentials:', credentials);
+
+    try {
+      console.log('Sending POST request to /register/');
+      const response = await axios.post('/register/', credentials);
+      console.log('Response received:', response);
+
+      localStorage.setItem('access_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
+      axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
+      console.log('Tokens stored and Authorization header set');
+
+      navigate('/home'); // Navigate to the home page after successful signup
+    } catch (error) {
+      console.error('Signup error:', error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
   };
 
-  const handleSignInClick = () => {
-    navigate('/login');  // Navigate to the login page
+  const handleSignInLinkClick = () => {
+    navigate('/login');
   };
 
   return (
@@ -61,7 +87,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create an Evently Account
+            Sign Up for Evently
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -107,12 +133,6 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -124,7 +144,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2" onClick={handleSignInClick}>
+                <Link href="#" variant="body2" onClick={handleSignInLinkClick}>
                   Already have an account? Sign in
                 </Link>
               </Grid>

@@ -57,5 +57,5 @@ Evenly is a web application built for managing events and guest lists, inspired 
      ```
    - **Start the Development Server:**
      ```bash
-     npm run dev
+     npm start
      ```

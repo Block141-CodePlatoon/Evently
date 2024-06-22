@@ -1,15 +1,12 @@
+// layouts/dashboard/index.js
+
 import React, { useState } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
-import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
-import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
-import Footer from 'examples/Footer';
+import DashboardLayout from 'components/DashboardLayout';
+import DashboardNavbar from 'components/DashboardNavbar';
+import Footer from 'components/Footer';
 
 function Dashboard() {
-  const [word, setWord] = useState('stocks');
-
-  const handleClick = () => {
-    setWord(word === 'stocks' ? 'stonks' : 'stocks');
-  };
 
   return (
     <DashboardLayout>

@@ -10,8 +10,8 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 // Material Dashboard 2 React example components
-import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
+import Sidenav from "components/Sidenav";
+import Configurator from "components/Configurator";
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
@@ -29,6 +29,9 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 //Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+
+import Login from "components/Login/Login";
+import Signup from "components/Signup/Signup";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -168,7 +171,9 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/home" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </ThemeProvider>
   );

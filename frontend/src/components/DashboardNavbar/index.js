@@ -9,9 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
-import Breadcrumbs from "examples/Breadcrumbs";
-import NotificationItem from "examples/Items/NotificationItem";
-import { navbar, navbarContainer, navbarRow, navbarIconButton, navbarMobileMenu } from "examples/Navbars/DashboardNavbar/styles";
+import Breadcrumbs from "components/Breadcrumbs";
+import { navbar, navbarContainer, navbarRow, navbarIconButton, navbarMobileMenu } from "components/DashboardNavbar/styles";
 import { useMaterialUIController, setTransparentNavbar, setMiniSidenav, setOpenConfigurator } from "context";
 
 function DashboardNavbar({ absolute, light, isMini }) {

@@ -43,8 +43,8 @@ export default function SignUp() {
     console.log('Credentials:', credentials);
 
     try {
-      console.log('Sending POST request to /register/');
-      const response = await axios.post('/register/', credentials);
+      console.log('Sending POST request to /accounts/register/');
+      const response = await axios.post('/accounts/register/', credentials);
       console.log('Response received:', response);
 
       localStorage.setItem('access_token', response.data.access);
@@ -52,7 +52,7 @@ export default function SignUp() {
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
       console.log('Tokens stored and Authorization header set');
 
-      navigate('/home'); // Navigate to the home page after successful signup
+      navigate('/home'); 
     } catch (error) {
       console.error('Signup error:', error);
       if (error.response) {

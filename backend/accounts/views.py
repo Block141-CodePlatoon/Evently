@@ -7,6 +7,9 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(View):
@@ -43,3 +46,7 @@ class RegisterView(View):
         form = UserCreationForm()
         return render(request, 'accounts/register.html', {'form': form})
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def protected_view(request):
+    return Response({"message": "This is a protected view"})

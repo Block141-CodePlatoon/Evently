@@ -1,35 +1,24 @@
-//App.jsx
-
 import { useState, useEffect, useMemo } from "react";
-// react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-// @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-// Material Dashboard 2 React example components
-import Sidenav from "components/Sidenav";
-import Configurator from "components/Configurator";
-// Material Dashboard 2 React themes
+import Sidenav from "examples/Sidenav";
+import Configurator from "examples/Configurator";
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
-// Material Dashboard 2 React Dark Mode themes
 import themeDark from "assets/theme-dark";
 import themeDarkRTL from "assets/theme-dark/theme-rtl";
-// RTL plugins
 import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-// Material Dashboard 2 React routes
 import routes from "routes";
-// Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
-//Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
+// Import the Login and Signup components
 import Login from "components/Login/Login";
 import Signup from "components/Signup/Signup";
 
@@ -57,7 +46,7 @@ export default function App() {
     });
 
     setRtlCache(cacheRtl);
-  }, []); 
+  }, []);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -126,11 +115,13 @@ export default function App() {
     </MDBox>
   );
 
+  const shouldRenderSidenav = !["/login", "/signup"].includes(pathname);
+
   return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
         <CssBaseline />
-        {layout === "dashboard" && (
+        {shouldRenderSidenav && layout === "dashboard" && (
           <>
             <Sidenav
               color={sidenavColor}
@@ -147,14 +138,16 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
   ) : (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
-      {layout === "dashboard" && (
+      {shouldRenderSidenav && layout === "dashboard" && (
         <>
           <Sidenav
             color={sidenavColor}
@@ -171,9 +164,9 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/home" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </ThemeProvider>
   );

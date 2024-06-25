@@ -60,4 +60,29 @@ Evently is a web application designed to streamline the management of events and
    - **Start the Development Server:**
      ```bash
      npm start
+<<<<<<< HEAD
      ```
+=======
+     ```
+
+5. **Environment Variables:**
+   - Ensure all necessary environment variables for Google Maps API key and SendGrid API key are set up.
+
+6. **Access the Application:**
+   - The backend server will typically be accessible at `http://localhost:8000`.
+   - The frontend application will typically be accessible at `http://localhost:3000`.
+
+## Project Status
+
+**Completed:**
+- **Backend Development**: Implemented Django REST API for event and guest models using PostgreSQL and Docker.
+- **Authentication**: Implemented token-based authentication with Django REST Framework.
+
+**In Progress:**
+- **Frontend Development**: Developing the React application for the user interface.
+
+**Remaining:**
+- **Integration of Google Maps API**: Incorporate for event location mapping and displaying on UI.
+- **Integration of SendGrid API**: Implement email notifications for event details and updates.
+- **Deployment**: Deploy the application on AWS.
+>>>>>>> 1974864 (initial backend setup w/ CRUD)

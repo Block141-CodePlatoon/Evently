@@ -60,9 +60,6 @@ Evently is a web application designed to streamline the management of events and
    - **Start the Development Server:**
      ```bash
      npm start
-<<<<<<< HEAD
-     ```
-=======
      ```
 
 5. **Environment Variables:**
@@ -85,4 +82,3 @@ Evently is a web application designed to streamline the management of events and
 - **Integration of Google Maps API**: Incorporate for event location mapping and displaying on UI.
 - **Integration of SendGrid API**: Implement email notifications for event details and updates.
 - **Deployment**: Deploy the application on AWS.
->>>>>>> 1974864 (initial backend setup w/ CRUD)

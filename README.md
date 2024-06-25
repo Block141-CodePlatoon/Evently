@@ -1,42 +1,44 @@
 # Evently
 
 ## Overview
-Evenly is a web application built for managing events and guest lists, inspired by Partiful. It provides CRUD functionality for events and their guests, integrates with third-party APIs, and includes user authentication.
-
-## Requirements Recap:
-
-- Backend: Django
-- Frontend: React
-- CRUD resources: Events, Guests
-- 3rd Party APIs: At least 2
-- Authentication: Django Rest Framework Token Authentication
-- Deployment: AWS
+Evently is a web application designed to streamline the management of events and guest lists, drawing inspiration from Partiful. The application enables users to perform CRUD operations for events and guests, integrates with third-party APIs for enhanced functionality, and includes secure user authentication. Key features include event scheduling, location mapping, and notifications.
 
 ## Features
-- **Event Management:**
-  - Create, Read, Update, Delete (CRUD) operations for events.
-  - Events have a title, description, date, location, and associated host (user).
-- **Guest Management:**
-  - Guests can be added to events with their name and email address.
-- **Authentication:**
-  - Token-based authentication using Django REST Framework's Token Authentication.
-- **Third-Party APIs:**
-  - Integration with at least two third-party APIs for enhanced functionality (e.g., Google Maps API for event locations, Eventbrite API for event details).
-- **Additional Features:**
-  - Search events and filter results.
-  - Provide alerts for event updates and invitations.
+**Event Management:**
+- Create, Read, Update, Delete (CRUD) operations for events.
+- Events have a title, description, date, location, and associated host (user).
+
+**Guest Management:**
+- Guests can be added to events with their name and email address.
+
+**Authentication:**
+- Token-based authentication using Django REST Framework's Token Authentication.
+
+**Third-Party APIs:**
+- Google Maps API: Integrate event locations with Google Maps to display maps and provide directions.
+- SendGrid API: Send email notifications to guests about event details, updates, or invitations.
+
+**Additional Features:**
+- Search events and filter results.
+- Provide alerts for event updates and invitations.
 
 #### Database Schema
 
 ![Database Schema](backend/db_schema.png)
 
-
-## Project Setup
+## Setup Instructions
 
 1. **Forking the Repository:**
-   - Visit the project repository on GitHub and fork to create to create a copy in your own GitHub account.
+   - Visit the project repository on GitHub and fork it to create a copy in your own GitHub account.
 
-2. **Backend (Django):**
+2. **Clone the Repository:**
+   - Clone the repository to your local machine:
+     ```bash
+     git clone <repository-url>
+     cd <repository-name>
+     ```
+
+3. **Backend (Django):**
    - **Navigate to the Backend Directory:**
      ```bash
      cd backend
@@ -46,7 +48,7 @@ Evenly is a web application built for managing events and guest lists, inspired 
      docker-compose up --build
      ```
 
-3. **Frontend (React):**
+4. **Frontend (React):**
    - **Navigate to the Frontend Directory:**
      ```bash
      cd frontend

@@ -22,7 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a4p5(950bc(7^d6nywpwfs(q-1d#q7c10ek^*3ir#r-aud%50t'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', 'default-sendgrid-key')
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', 'default-google-maps-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

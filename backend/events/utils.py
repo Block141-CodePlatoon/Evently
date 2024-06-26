@@ -1,6 +1,13 @@
+import googlemaps
+from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.conf import settings
+
+def get_directions(origin, destination):
+    gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+    directions = gmaps.directions(origin, destination)
+    return directions
 
 def send_email(to_email, subject, content):
     # Create a Mail object with sender, recipient, subject, and content

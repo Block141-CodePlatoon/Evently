@@ -24,13 +24,13 @@ class EventDetail(APIView):
         event = get_object_or_404(Event.objects.all(), pk=pk)
         serializer = EventSerializer(event)
         return Response({"result": serializer.data})
-    
+
     def put(self, request, pk):
         event = get_object_or_404(Event.objects.all(), pk=pk)
         serializer = EventSerializer(instance=event, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
-            event = serializer.save()
-            return Response({"result": f"Event {event.id} updated"})
+            serializer.save()
+            return Response({"result": f"Event {pk} updated"}, status=200)
 
     def delete(self, request, pk):
         event = get_object_or_404(Event.objects.all(), pk=pk)

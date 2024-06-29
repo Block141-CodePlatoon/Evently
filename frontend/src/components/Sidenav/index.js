@@ -18,11 +18,11 @@ import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 
 // Material Dashboard 2 React example components
-import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
+import SidenavCollapse from "./SidenavCollapse";
 
 // Custom styles for the Sidenav
-import SidenavRoot from "examples/Sidenav/SidenavRoot";
-import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
+import SidenavRoot from "./SidenavRoot";
+import sidenavLogoLabel from "./styles/sidenav";
 
 // Material Dashboard 2 React context
 import {

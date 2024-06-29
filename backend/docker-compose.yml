@@ -4,8 +4,8 @@ services:
   api:
     build: .
     command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --workers 3 --threads 2 --bind 0.0.0.0:8000 --timeout 300 evently.wsgi:application"
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     depends_on:
       - db
 

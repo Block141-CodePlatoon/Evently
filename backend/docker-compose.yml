@@ -24,6 +24,7 @@ services:
         - "80:80"
       volumes:
         - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        - /home/ec2-user/Evently/frontend/src:/usr/share/nginx/html
       depends_on:
         - api
 volumes:

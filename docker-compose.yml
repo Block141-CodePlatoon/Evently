@@ -15,28 +15,17 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: evently_db
-    volumes: 
-      - postgres_data:/var/lib/postgresql/data
- 
-  # nginx:
-  #     image: nginx:latest
-  #     ports:
-  #       - "80:80"
-  #     volumes:
-  #       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-  #       - /home/ec2-user/Evently/frontend/src:/usr/share/nginx/html
-  #     depends_on:
-  #       - api
-
-  frontend:
-    build:
-      context: ./frontend
     volumes:
-      - /home/ec2-user/Evently/frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+      - postgres_data:/var/lib/postgresql/data
+
+
+  nginx:
+    build: 
+      context: .
+      dockerfile: ./webserver/Dockerfile
+    restart: always
     ports:
       - "80:80"
-    depends_on:
-      - api
 
 volumes:
   postgres_data:

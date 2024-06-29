@@ -1,26 +1,26 @@
-import { useState, useEffect, useMemo } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
-import MDBox from "components/MDBox";
-import Sidenav from "components/Sidenav";
-import Configurator from "components/Configurator";
-import theme from "assets/theme";
-import themeRTL from "assets/theme/theme-rtl";
-import themeDark from "assets/theme-dark";
-import themeDarkRTL from "assets/theme-dark/theme-rtl";
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import routes from "routes";
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
-import brandWhite from "assets/images/logo-ct.svg";
-import brandDark from "assets/images/logo-ct-dark.svg";
-
-// Import the Login and Signup components
-import Login from "components/Login/Login";
-import Signup from "components/Signup/Signup";
+import { useState, useEffect, useMemo } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Icon from '@mui/material/Icon';
+import MDBox from 'components/MDBox';
+import Sidenav from 'components/Sidenav';
+import Configurator from 'components/Configurator';
+import theme from 'assets/theme';
+import themeRTL from 'assets/theme/theme-rtl';
+import themeDark from 'assets/theme-dark';
+import themeDarkRTL from 'assets/theme-dark/theme-rtl';
+import rtlPlugin from 'stylis-plugin-rtl';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import routes from 'routes';
+import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from 'context';
+import brandWhite from 'assets/images/logo-ct.svg';
+import brandDark from 'assets/images/logo-ct-dark.svg';
+import Login from 'components/Login/Login';
+import Signup from 'components/Signup/Signup';
+import NewEventLayout from 'layouts/newevents'; // Updated import
+import CreateEvent from 'components/CreateEvent/CreateEvent'; // Importing CreateEvent component
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -38,17 +38,15 @@ export default function App() {
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
-  // Cache for the rtl
   useMemo(() => {
     const cacheRtl = createCache({
-      key: "rtl",
+      key: 'rtl',
       stylisPlugins: [rtlPlugin],
     });
 
     setRtlCache(cacheRtl);
   }, []);
 
-  // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {
       setMiniSidenav(dispatch, false);
@@ -56,7 +54,6 @@ export default function App() {
     }
   };
 
-  // Close sidenav when mouse leave mini sidenav
   const handleOnMouseLeave = () => {
     if (onMouseEnter) {
       setMiniSidenav(dispatch, true);
@@ -64,53 +61,47 @@ export default function App() {
     }
   };
 
-  // Change the openConfigurator state
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
-  // Setting the dir attribute for the body element
   useEffect(() => {
-    document.body.setAttribute("dir", direction);
+    document.body.setAttribute('dir', direction);
   }, [direction]);
 
-  // Setting page scroll to 0 when changing the route
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+  const getRoutes = (allRoutes) => allRoutes.map((route) => {
+    if (route.collapse) {
+      return getRoutes(route.collapse);
+    }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
+    if (route.route) {
+      return <Route exact path={route.route} element={route.component} key={route.key} />;
+    }
 
-      return null;
-    });
+    return null;
+  });
 
   const configsButton = (
     <MDBox>
-      <Icon fontSize="small" color="inherit">
-        settings
-      </Icon>
+      <Icon fontSize="small" color="inherit">settings</Icon>
     </MDBox>
   );
 
-  const shouldRenderSidenav = !["/login", "/signup"].includes(pathname);
+  const shouldRenderSidenav = !['/login', '/signup'].includes(pathname);
 
-  return direction === "rtl" ? (
+  return direction === 'rtl' ? (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
         <CssBaseline />
-        {shouldRenderSidenav && layout === "dashboard" && (
+        {shouldRenderSidenav && layout === 'dashboard' && (
           <>
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="Evently"
+              brandName='Evently'
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
@@ -119,24 +110,25 @@ export default function App() {
             {configsButton}
           </>
         )}
-        {layout === "vr" && <Configurator />}
+        {layout === 'vr' && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<Navigate to="/home" />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='*' element={<Navigate to='/home' />} />
+          <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
         </Routes>
       </ThemeProvider>
     </CacheProvider>
   ) : (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
-      {shouldRenderSidenav && layout === "dashboard" && (
+      {shouldRenderSidenav && layout === 'dashboard' && (
         <>
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Evently"
+            brandName='Evently'
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -145,12 +137,13 @@ export default function App() {
           {configsButton}
         </>
       )}
-      {layout === "vr" && <Configurator />}
+      {layout === 'vr' && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<Navigate to="/home" />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='*' element={<Navigate to='/home' />} />
+        <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
       </Routes>
     </ThemeProvider>
   );

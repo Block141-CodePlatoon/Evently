@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+import axios from '../../axiosSetup'; // Ensure this path is correct
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
@@ -12,13 +12,7 @@ import MDButton from 'components/MDButton';
 import SidenavCollapse from './SidenavCollapse';
 import SidenavRoot from './SidenavRoot';
 import sidenavLogoLabel from './styles/sidenav';
-import {
-  useMaterialUIController,
-  setMiniSidenav,
-  setTransparentSidenav,
-  setWhiteSidenav,
-} from 'context';
-
+import { useMaterialUIController, setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from 'context';
 import EventPage from 'components/EventPage/EventPage'; // Ensure correct path
 import CreateEvent from 'components/CreateEvent/CreateEvent'; // Ensure correct path
 import Dashboard from 'layouts/dashboard'; // Ensure correct path
@@ -58,7 +52,9 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   useEffect(() => {
     const fetchUserEvents = async () => {
       try {
+        console.log('Sending GET request to /api/events/');
         const response = await axios.get('/api/events/');
+        console.log('Response received:', response);
         const events = response.data.result.map(event => ({
           type: 'collapse',
           name: event.name,
@@ -81,27 +77,15 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, []);
 
   const renderRoutes = [
-    // Static "Create Event" button
     ...routes,
-    // Dynamically fetched user events
     ...userRoutes,
   ].map(({ type, name, icon, title, key, href, route }) => {
     let returnValue;
 
     if (type === 'collapse') {
       returnValue = href ? (
-        <Link
-          href={href}
-          key={key}
-          target='_blank'
-          rel='noreferrer'
-          sx={{ textDecoration: 'none' }}
-        >
-          <SidenavCollapse
-            name={name}
-            icon={icon}
-            active={key === collapseName}
-          />
+        <Link href={href} key={key} target='_blank' rel='noreferrer' sx={{ textDecoration: 'none' }}>
+          <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
         </Link>
       ) : (
         <NavLink key={key} to={route}>

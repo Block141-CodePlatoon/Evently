@@ -1,10 +1,10 @@
 import React from 'react';
-import { Grid, Typography, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import DashboardLayout from 'components/DashboardLayout';
 import DashboardNavbar from 'components/DashboardNavbar';
 import Footer from 'components/Footer';
 
-function Dashboard({ children }) {
+function NewEventLayout({ children }) {
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -16,4 +16,4 @@ function Dashboard({ children }) {
   );
 }
 
-export default Dashboard;
+export default NewEventLayout;

@@ -9,7 +9,7 @@ RUN npm install
 
 # Build the app
 COPY . /app/
-RUN npm run build
+RUN npm run build --loglevel verbose
 
 # Serve the app with Nginx
 FROM nginx:alpine

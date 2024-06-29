@@ -31,4 +31,4 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY ./webserver/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /frontend/dist /usr/share/nginx/html
+COPY --from=builder ./frontend/build /usr/share/nginx/html

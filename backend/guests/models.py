@@ -1,3 +1,5 @@
+# guests/models.py
+
 from django.db import models
 from events.models import Event
 

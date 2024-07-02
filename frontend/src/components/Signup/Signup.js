@@ -37,6 +37,7 @@ export default function SignUp() {
     const credentials = {
       username: data.get('email'),
       password: data.get('password'),
+      password2: data.get('password2'),
     };
 
     console.log('Form data:', data);
@@ -130,6 +131,17 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password2"
+                  label="Confirm Password"
+                  type="password"
+                  id="password2"
                   autoComplete="new-password"
                 />
               </Grid>

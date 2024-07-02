@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,6 +20,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [openMenu, setOpenMenu] = useState(false);
   const [accountMenu, setAccountMenu] = useState(null);
   const route = useLocation().pathname.split("/").slice(1);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (fixedNavbar) {
@@ -44,6 +46,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseMenu = () => setOpenMenu(false);
   const handleOpenAccountMenu = (event) => setAccountMenu(event.currentTarget);
   const handleCloseAccountMenu = () => setAccountMenu(null);
+
+  const handleLogout = () => {
+    // Clear user data (example: localStorage)
+    localStorage.removeItem("userToken"); // Adjust this as per your app's storage key
+    // Redirect to sign-in page
+    navigate("/login");
+  };
 
   const renderNotificationMenu = () => (
     <Menu
@@ -87,7 +96,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
       <MenuItem onClick={handleCloseAccountMenu}>
         <Icon>settings</Icon>&nbsp;My account
       </MenuItem>
-      <MenuItem onClick={handleCloseAccountMenu}>
+      <MenuItem onClick={handleLogout}>
         <Icon>logout</Icon>&nbsp;Logout
       </MenuItem>
     </Menu>

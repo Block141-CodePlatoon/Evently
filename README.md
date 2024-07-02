@@ -77,8 +77,6 @@ Evently is a web application designed to streamline the management of events and
 
 **In Progress:**
 - **Frontend Development**: Developing the React application for the user interface.
-
-**Remaining:**
 - **Integration of Google Maps API**: Incorporate for event location mapping and displaying on UI.
 - **Integration of SendGrid API**: Implement email notifications for event details and updates.
 - **Deployment**: Deploy the application on AWS.

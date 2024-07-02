@@ -1,30 +1,16 @@
-import googlemaps
-from django.conf import settings
+# events/utils.py
+
+import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from django.conf import settings
 
-def get_directions(origin, destination):
-    gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-    directions = gmaps.directions(origin, destination)
-    return directions
-
-def send_email(to_email, subject, content):
-    # Create a Mail object with sender, recipient, subject, and content
+def send_email(to_email, subject, content, from_email):
+    sg = SendGridAPIClient(api_key=os.getenv('SENDGRID_API_KEY'))
     message = Mail(
-        from_email=settings.DEFAULT_FROM_EMAIL,
+        from_email=from_email,
         to_emails=to_email,
         subject=subject,
         html_content=content
     )
-    
-    sg = SendGridAPIClient(settings.SENDGRID_API_KEY)  # Initialize SendGrid client
-    
-    response = sg.send(message)  # Send the email using the initialized client
-    
-    # Check the response status code directly
-    if response.status_code == 200:
-        return True  # Email sent successfully
-    else:
-        print(f"Failed to send email. Status code: {response.status_code}")
-        return False  # Email failed to send
+    response = sg.send(message)
+    return response.status_code

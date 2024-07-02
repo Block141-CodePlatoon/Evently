@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../axiosSetup';
+import axios from '../../axiosSetup'; // Ensure this path is correct
 import tiredImage from '../../assets/images/tired.webp';
 
 function Copyright(props) {
@@ -47,8 +47,8 @@ export default function SignIn() {
     console.log('Credentials:', credentials);
 
     try {
-      console.log('Sending POST request to /token/');
-      const response = await axios.post('/token/', credentials);
+      console.log('Sending POST request to /api/token/');
+      const response = await axios.post('/api/token/', credentials);
       console.log('Response received:', response);
 
       localStorage.setItem('access_token', response.data.access);
@@ -56,7 +56,7 @@ export default function SignIn() {
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
       console.log('Tokens stored and Authorization header set');
 
-      navigate('/home'); // Navigate to the home page after successful login
+      navigate('/home'); 
     } catch (error) {
       console.error('Login error:', error);
       if (error.response) {

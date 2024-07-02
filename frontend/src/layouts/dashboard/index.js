@@ -1,13 +1,10 @@
-// layouts/dashboard/index.js
-
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import DashboardLayout from 'components/DashboardLayout';
 import DashboardNavbar from 'components/DashboardNavbar';
 import Footer from 'components/Footer';
 
-function Dashboard() {
-
+function Dashboard({ children }) {
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -24,6 +21,7 @@ function Dashboard() {
             </Box>
           </Grid>
         </Grid>
+        {children}
       </Box>
       <Footer />
     </DashboardLayout>

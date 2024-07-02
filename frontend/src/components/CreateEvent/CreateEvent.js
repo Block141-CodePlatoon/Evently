@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
-import axios from 'axios';
+import axios from '../../axiosSetup'; // Ensure this path is correct
 
 const CreateEvent = () => {
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [location, setLocation] = useState('');
+  const [host, setHost] = useState(1); // Assuming you have the host ID
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const eventData = {
+      title,
+      description,
+      date,
+      location,
+      host,
+    };
+
     try {
-      await axios.post('/api/events/', { name, description });
+      console.log('Sending POST request to /api/events/');
+      const response = await axios.post('/api/events/', eventData);
+      console.log('Response received:', response);
       // Clear the form
-      setName('');
+      setTitle('');
       setDescription('');
-      // Optionally, trigger a refresh of the sidenav (you might use context or props)
+      setDate('');
+      setLocation('');
+      setHost(1);
     } catch (error) {
       console.error('Error creating event:', error);
     }
@@ -26,9 +41,9 @@ const CreateEvent = () => {
         <Box mb={2}>
           <TextField
             fullWidth
-            label="Event Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            label="Event Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
         </Box>
@@ -41,7 +56,37 @@ const CreateEvent = () => {
             required
           />
         </Box>
-        <Button type="submit" variant="contained" color="primary">
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Date"
+            type="datetime-local"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              placeholder: '',
+            }}
+          />
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            required
+          />
+        </Box>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ color: 'white' }} // Change button text to white
+        >
           Create Event
         </Button>
       </form>

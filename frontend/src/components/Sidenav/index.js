@@ -51,13 +51,20 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   useEffect(() => {
     const fetchUserEvents = async () => {
+      const token = localStorage.getItem('access_token');
+      console.log('Token from local storage:', token); // Add this log to check the token
+      if (!token) {
+        console.error('No token found in local storage');
+        return;
+      }
+
       try {
         console.log('Sending GET request to /api/events/');
         const response = await axios.get('/api/events/');
         console.log('Response received:', response);
         const events = response.data.result.map(event => ({
           type: 'collapse',
-          name: event.name,
+          name: event.title,  // Ensure the field names match your API response
           key: event.id.toString(),
           icon: <Icon>event</Icon>,
           route: `/events/${event.id}`,
@@ -172,6 +179,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           variant='gradient'
           color={sidenavColor}
           fullWidth
+          sx={{ color: 'white' }} // Change button text to white
         >
           upgrade to pro
         </MDButton>

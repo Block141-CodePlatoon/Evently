@@ -17,7 +17,7 @@ import {
   collapseIconBox,
   collapseIcon,
   collapseText,
-} from "examples/Sidenav/styles/sidenavCollapse";
+} from "./styles/sidenavCollapse";
 
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from '../../axiosSetup'; // Ensure this path is correct
+import axios from '../../axiosSetup';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
@@ -13,10 +13,10 @@ import SidenavCollapse from './SidenavCollapse';
 import SidenavRoot from './SidenavRoot';
 import sidenavLogoLabel from './styles/sidenav';
 import { useMaterialUIController, setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from 'context';
-import EventPage from 'components/EventPage/EventPage'; // Ensure correct path
-import CreateEvent from 'components/CreateEvent/CreateEvent'; // Ensure correct path
-import Dashboard from 'layouts/dashboard'; // Ensure correct path
-import NewEventsLayout from 'layouts/newevents'; // Ensure correct path
+import EventPage from 'components/EventPage/EventPage';
+import CreateEvent from 'components/CreateEvent/CreateEvent';
+import Dashboard from 'layouts/dashboard';
+import NewEventsLayout from 'layouts/newevents';
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
@@ -52,19 +52,16 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   useEffect(() => {
     const fetchUserEvents = async () => {
       const token = localStorage.getItem('access_token');
-      console.log('Token from local storage:', token); // Add this log to check the token
       if (!token) {
         console.error('No token found in local storage');
         return;
       }
 
       try {
-        console.log('Sending GET request to /api/events/');
         const response = await axios.get('/api/events/');
-        console.log('Response received:', response);
         const events = response.data.result.map(event => ({
           type: 'collapse',
-          name: event.title,  // Ensure the field names match your API response
+          name: event.title,
           key: event.id.toString(),
           icon: <Icon>event</Icon>,
           route: `/events/${event.id}`,
@@ -179,7 +176,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           variant='gradient'
           color={sidenavColor}
           fullWidth
-          sx={{ color: 'white' }} // Change button text to white
+          sx={{ color: 'white' }}
         >
           upgrade to pro
         </MDButton>

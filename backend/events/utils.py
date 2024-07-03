@@ -1,13 +1,41 @@
 import googlemaps
 from django.conf import settings
+import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.conf import settings
+from views import SendEmailAPIView
+
+
+
+
 
 def get_directions(origin, destination):
+    # Initialize the Google Maps client with your API key.
     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-    directions = gmaps.directions(origin, destination)
-    return directions
+    
+    try:
+        # Request directions between the origin and destination.
+        directions = gmaps.directions(origin, destination)
+        
+        # Optionally, you can add more parameters to customize the directions.
+        # directions = gmaps.directions(origin, destination, mode="driving", departure_time="now")
+        
+        return directions
+    except Exception as e:
+        # Log the error or handle it appropriately.
+        print(f"Failed to retrieve directions: {e}")
+        return None
+
+
+
+
+
+
+
+
+
+
 
 def send_email(to_email, subject, content):
     # Create a Mail object with sender, recipient, subject, and content

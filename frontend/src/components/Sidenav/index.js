@@ -23,7 +23,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const [userRoutes, setUserRoutes] = useState([]);
   const location = useLocation();
-  const collapseName = location.pathname.replace('/', '');
+  const currentRoute = location.pathname;
 
   let textColor = 'white';
 
@@ -89,11 +89,11 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     if (type === 'collapse') {
       returnValue = href ? (
         <Link href={href} key={key} target='_blank' rel='noreferrer' sx={{ textDecoration: 'none' }}>
-          <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
+          <SidenavCollapse name={name} icon={icon} active={currentRoute === route} />
         </Link>
       ) : (
         <NavLink key={key} to={route}>
-          <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
+          <SidenavCollapse name={name} icon={icon} active={currentRoute === route} />
         </NavLink>
       );
     } else if (type === 'title') {

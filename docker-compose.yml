@@ -12,10 +12,10 @@ services:
 
     depends_on:
       - db
-    volumes:
-      - .:/src
-    env_file:
-      - .env
+    # volumes:
+    #   - .:/src
+    # env_file:
+    #   - .env
 
   db:
     image: postgres:15

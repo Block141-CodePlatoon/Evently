@@ -19,8 +19,9 @@ import brandWhite from 'assets/images/logo-ct.svg';
 import brandDark from 'assets/images/logo-ct-dark.svg';
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
-import NewEventLayout from 'layouts/newevents'; // Updated import
-import CreateEvent from 'components/CreateEvent/CreateEvent'; // Importing CreateEvent component
+import NewEventLayout from 'layouts/newevents';
+import CreateEvent from 'components/CreateEvent/CreateEvent';
+import EventPage from 'components/EventPage/EventPage'; // Importing EventPage component
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -117,6 +118,7 @@ export default function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='*' element={<Navigate to='/home' />} />
           <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
+          <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} /> {/* Route for individual events */}
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -144,6 +146,7 @@ export default function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='*' element={<Navigate to='/home' />} />
         <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
+        <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} /> {/* Route for individual events */}
       </Routes>
     </ThemeProvider>
   );

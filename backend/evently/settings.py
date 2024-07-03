@@ -145,23 +145,17 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-<<<<<<< HEAD
-=======
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
->>>>>>> 5ef78a4 (Side nav w/ event creation working)
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-<<<<<<< HEAD
-=======
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
->>>>>>> 5ef78a4 (Side nav w/ event creation working)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

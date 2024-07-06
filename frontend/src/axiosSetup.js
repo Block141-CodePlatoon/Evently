@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-// Create an instance of axios
 const instance = axios.create({
-  baseURL: 'http://localhost:8000/',
+  baseURL: 'http://localhost',
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true, // Ensure this is set to true to send cookies
+  withCredentials: true, 
 });
 
-// Helper function to get the CSRF token from cookies
 const getCSRFToken = () => {
   const name = 'csrftoken';
   const cookieValue = document.cookie
@@ -18,7 +16,6 @@ const getCSRFToken = () => {
   return cookieValue;
 };
 
-// Add a request interceptor to include the token
 instance.interceptors.request.use(
   config => {
     const token = localStorage.getItem('access_token');
@@ -41,7 +38,6 @@ instance.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle token refresh
 instance.interceptors.response.use(
   response => response,
   async error => {

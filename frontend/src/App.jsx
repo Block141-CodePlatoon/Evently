@@ -21,7 +21,7 @@ import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
 import NewEventLayout from 'layouts/newevents';
 import CreateEvent from 'components/CreateEvent/CreateEvent';
-import EventPage from 'components/EventPage/EventPage'; // Importing EventPage component
+import EventPage from 'components/EventPage/EventPage'; 
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -117,8 +117,8 @@ export default function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='*' element={<Navigate to='/home' />} />
-          <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
-          <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} /> {/* Route for individual events */}
+          <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> 
+          <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} /> 
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -145,8 +145,8 @@ export default function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='*' element={<Navigate to='/home' />} />
-        <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
-        <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} /> {/* Route for individual events */}
+        <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> 
+        <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} />
       </Routes>
     </ThemeProvider>
   );

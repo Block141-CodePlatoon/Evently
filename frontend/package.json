@@ -15,11 +15,14 @@
   "dependencies": {
     "@babel/code-frame": "^7.24.6",
     "@craco/craco": "^7.1.0",
+    "@date-io/date-fns": "^3.0.0",
     "@emotion/cache": "11.10.8",
-    "@emotion/react": "^11.10.8",
-    "@emotion/styled": "^11.10.8",
-    "@mui/icons-material": "^5.15.18",
-    "@mui/material": "^5.12.3",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.16.0",
+    "@mui/lab": "^5.0.0-alpha.171",
+    "@mui/material": "^5.16.0",
+    "@mui/x-date-pickers": "^7.9.0",
     "axios": "^1.7.2",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
@@ -27,6 +30,8 @@
     "chroma-js": "2.4.2",
     "craco": "^0.0.3",
     "crypto-browserify": "^3.12.0",
+    "date-fns": "^3.6.0",
+    "dayjs": "^1.11.11",
     "https-browserify": "^1.0.0",
     "jwt-decode": "^4.0.0",
     "net-browserify": "^0.2.4",
@@ -38,6 +43,7 @@
     "react-chartjs-2": "5.2.0",
     "react-dom": "18.2.0",
     "react-github-btn": "1.4.0",
+    "react-mui-scheduler": "^2.0.4",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "react-table": "7.8.0",
@@ -86,6 +92,7 @@
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "npm-force-resolutions": "^0.0.10",
     "prettier": "2.8.8"
   },
   "browser": {
@@ -95,5 +102,9 @@
   },
   "overrides": {
     "svgo": "3.0.2"
+  },
+  "resolutions": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }

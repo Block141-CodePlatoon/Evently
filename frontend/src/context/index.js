@@ -1,55 +1,40 @@
-
-import { createContext, useContext, useReducer, useMemo } from "react";
-
-// prop-types is a library for typechecking of props
+// context/index.js
+import { createContext, useContext, useReducer, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from "../axiosSetup";
 
-// Material Dashboard 2 React main context
 const MaterialUI = createContext();
-
-// Setting custom name for the context which is visible on react dev tools
 MaterialUI.displayName = "MaterialUIContext";
 
-// Material Dashboard 2 React reducer
 function reducer(state, action) {
   switch (action.type) {
-    case "MINI_SIDENAV": {
+    case "MINI_SIDENAV":
       return { ...state, miniSidenav: action.value };
-    }
-    case "TRANSPARENT_SIDENAV": {
+    case "TRANSPARENT_SIDENAV":
       return { ...state, transparentSidenav: action.value };
-    }
-    case "WHITE_SIDENAV": {
+    case "WHITE_SIDENAV":
       return { ...state, whiteSidenav: action.value };
-    }
-    case "SIDENAV_COLOR": {
+    case "SIDENAV_COLOR":
       return { ...state, sidenavColor: action.value };
-    }
-    case "TRANSPARENT_NAVBAR": {
+    case "TRANSPARENT_NAVBAR":
       return { ...state, transparentNavbar: action.value };
-    }
-    case "FIXED_NAVBAR": {
+    case "FIXED_NAVBAR":
       return { ...state, fixedNavbar: action.value };
-    }
-    case "OPEN_CONFIGURATOR": {
+    case "OPEN_CONFIGURATOR":
       return { ...state, openConfigurator: action.value };
-    }
-    case "DIRECTION": {
+    case "DIRECTION":
       return { ...state, direction: action.value };
-    }
-    case "LAYOUT": {
+    case "LAYOUT":
       return { ...state, layout: action.value };
-    }
-    case "DARKMODE": {
+    case "DARKMODE":
       return { ...state, darkMode: action.value };
-    }
-    default: {
+    case "SET_EVENTS":
+      return { ...state, events: action.value || [] }; // Ensure events is always an array
+    default:
       throw new Error(`Unhandled action type: ${action.type}`);
-    }
   }
 }
 
-// Material Dashboard 2 React context provider
 function MaterialUIControllerProvider({ children }) {
   const initialState = {
     miniSidenav: false,
@@ -62,34 +47,44 @@ function MaterialUIControllerProvider({ children }) {
     direction: "ltr",
     layout: "dashboard",
     darkMode: false,
+    events: [], // Initialize events as an empty array
   };
 
   const [controller, dispatch] = useReducer(reducer, initialState);
 
   const value = useMemo(() => [controller, dispatch], [controller, dispatch]);
 
+  // Fetch events when the component mounts
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get('/events/');
+        dispatch({ type: "SET_EVENTS", value: response.data });
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
   return <MaterialUI.Provider value={value}>{children}</MaterialUI.Provider>;
 }
 
-// Material Dashboard 2 React custom hook for using context
 function useMaterialUIController() {
   const context = useContext(MaterialUI);
 
   if (!context) {
-    throw new Error(
-      "useMaterialUIController should be used inside the MaterialUIControllerProvider."
-    );
+    throw new Error("useMaterialUIController should be used inside the MaterialUIControllerProvider.");
   }
 
   return context;
 }
 
-// Typechecking props for the MaterialUIControllerProvider
 MaterialUIControllerProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-// Context module functions
 const setMiniSidenav = (dispatch, value) => dispatch({ type: "MINI_SIDENAV", value });
 const setTransparentSidenav = (dispatch, value) => dispatch({ type: "TRANSPARENT_SIDENAV", value });
 const setWhiteSidenav = (dispatch, value) => dispatch({ type: "WHITE_SIDENAV", value });
@@ -100,6 +95,7 @@ const setOpenConfigurator = (dispatch, value) => dispatch({ type: "OPEN_CONFIGUR
 const setDirection = (dispatch, value) => dispatch({ type: "DIRECTION", value });
 const setLayout = (dispatch, value) => dispatch({ type: "LAYOUT", value });
 const setDarkMode = (dispatch, value) => dispatch({ type: "DARKMODE", value });
+const setEvents = (dispatch, value) => dispatch({ type: "SET_EVENTS", value });
 
 export {
   MaterialUIControllerProvider,
@@ -114,4 +110,5 @@ export {
   setDirection,
   setLayout,
   setDarkMode,
+  setEvents,
 };

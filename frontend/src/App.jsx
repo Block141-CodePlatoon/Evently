@@ -21,7 +21,7 @@ import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
 import NewEventLayout from 'layouts/newevents';
 import CreateEvent from 'components/CreateEvent/CreateEvent';
-import EventPage from 'components/EventPage/EventPage'; 
+import EventPage from 'components/EventPage/EventPage';
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -38,6 +38,7 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  const [eventCreated, setEventCreated] = useState(false); // State for tracking event creation
 
   useMemo(() => {
     const cacheRtl = createCache({
@@ -73,25 +74,32 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) => allRoutes.map((route) => {
-    if (route.collapse) {
-      return getRoutes(route.collapse);
-    }
+  const getRoutes = (allRoutes) =>
+    allRoutes.map((route) => {
+      if (route.collapse) {
+        return getRoutes(route.collapse);
+      }
 
-    if (route.route) {
-      return <Route exact path={route.route} element={route.component} key={route.key} />;
-    }
+      if (route.route) {
+        return <Route exact path={route.route} element={route.component} key={route.key} />;
+      }
 
-    return null;
-  });
+      return null;
+    });
 
   const configsButton = (
     <MDBox>
-      <Icon fontSize="small" color="inherit">settings</Icon>
+      <Icon fontSize="small" color="inherit">
+        settings
+      </Icon>
     </MDBox>
   );
 
   const shouldRenderSidenav = !['/login', '/signup'].includes(pathname);
+
+  const handleEventCreated = () => {
+    setEventCreated((prev) => !prev); // Toggle the state to force a rerender
+  };
 
   return direction === 'rtl' ? (
     <CacheProvider value={rtlCache}>
@@ -102,10 +110,11 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName='Evently'
+              brandName="Evently"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
+              eventCreated={eventCreated} // Pass the state to Sidenav
             />
             <Configurator />
             {configsButton}
@@ -114,11 +123,14 @@ export default function App() {
         {layout === 'vr' && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='*' element={<Navigate to='/home' />} />
-          <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> 
-          <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} /> 
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/home" />} />
+          <Route
+            path="/create-event"
+            element={<NewEventLayout><CreateEvent onEventCreated={handleEventCreated} /></NewEventLayout>}
+          />
+          <Route path="/events/:id" element={<NewEventLayout><EventPage /></NewEventLayout>} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -130,10 +142,11 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName='Evently'
+            brandName="Evently"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
+            eventCreated={eventCreated} // Pass the state to Sidenav
           />
           <Configurator />
           {configsButton}
@@ -142,11 +155,14 @@ export default function App() {
       {layout === 'vr' && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='*' element={<Navigate to='/home' />} />
-        <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> 
-        <Route path='/events/:id' element={<NewEventLayout><EventPage /></NewEventLayout>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Navigate to="/home" />} />
+        <Route
+          path="/create-event"
+          element={<NewEventLayout><CreateEvent onEventCreated={handleEventCreated} /></NewEventLayout>}
+        />
+        <Route path="/events/:id" element={<NewEventLayout><EventPage /></NewEventLayout>} />
       </Routes>
     </ThemeProvider>
   );

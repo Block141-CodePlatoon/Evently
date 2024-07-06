@@ -12,8 +12,8 @@ services:
 
     depends_on:
       - db
-    # volumes:
-    #   - .:/src
+    volumes:
+      - ./backend/staticfiles:/src/staticfiles
     # env_file:
     #   - .env
 
@@ -35,6 +35,8 @@ services:
       - "80:80"
     depends_on:
       - api
+    volumes:
+      - ./backend/staticfiles:/src/staticfiles
 
 volumes:
   postgres_data:

@@ -47,8 +47,8 @@ export default function SignIn() {
     console.log('Credentials:', credentials);
 
     try {
-      console.log('Sending POST request to /api/token/');
-      const response = await axios.post('/api/token/', credentials);
+      console.log('Sending POST request to /token/');
+      const response = await axios.post('/token/', credentials);
       console.log('Response received:', response);
 
       localStorage.setItem('access_token', response.data.access);

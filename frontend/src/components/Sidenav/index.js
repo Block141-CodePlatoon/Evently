@@ -14,11 +14,10 @@ import SidenavRoot from './SidenavRoot';
 import sidenavLogoLabel from './styles/sidenav';
 import { useMaterialUIController, setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from 'context';
 import EventPage from 'components/EventPage/EventPage';
-import CreateEvent from 'components/CreateEvent/CreateEvent';
 import Dashboard from 'layouts/dashboard';
 import NewEventsLayout from 'layouts/newevents';
 
-function Sidenav({ color, brand, brandName, routes, ...rest }) {
+function Sidenav({ color, brand, brandName, routes, eventCreated, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const [userRoutes, setUserRoutes] = useState([]);
@@ -35,6 +34,37 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
+  const fetchUserEvents = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('No token found in local storage');
+      return;
+    }
+
+    try {
+      const response = await axios.get('/events/');
+      const events = response.data.result.map(event => ({
+        type: 'collapse',
+        name: event.title,
+        key: event.id.toString(),
+        icon: <Icon>event</Icon>,
+        route: `/events/${event.id}`,
+        component: (
+          <NewEventsLayout>
+            <EventPage eventId={event.id} />
+          </NewEventsLayout>
+        ),
+      }));
+      setUserRoutes(events);
+    } catch (error) {
+      console.error('Error fetching user events:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserEvents();
+  }, [eventCreated]); // Re-fetch events when eventCreated changes
+
   useEffect(() => {
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
@@ -48,37 +78,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
     return () => window.removeEventListener('resize', handleMiniSidenav);
   }, [dispatch, location]);
-
-  useEffect(() => {
-    const fetchUserEvents = async () => {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        console.error('No token found in local storage');
-        return;
-      }
-
-      try {
-        const response = await axios.get('/api/events/');
-        const events = response.data.result.map(event => ({
-          type: 'collapse',
-          name: event.title,
-          key: event.id.toString(),
-          icon: <Icon>event</Icon>,
-          route: `/events/${event.id}`,
-          component: (
-            <NewEventsLayout>
-              <EventPage eventId={event.id} />
-            </NewEventsLayout>
-          ),
-        }));
-        setUserRoutes(events);
-      } catch (error) {
-        console.error('Error fetching user events:', error);
-      }
-    };
-
-    fetchUserEvents();
-  }, []);
 
   const renderRoutes = [
     ...routes,
@@ -195,6 +194,7 @@ Sidenav.propTypes = {
   brand: PropTypes.string,
   brandName: PropTypes.string.isRequired,
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  eventCreated: PropTypes.bool.isRequired, // Add the new prop
 };
 
 export default Sidenav;

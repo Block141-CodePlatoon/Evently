@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost',
+  baseURL: 'http://localhost/api',
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 const getCSRFToken = () => {
@@ -48,7 +48,7 @@ instance.interceptors.response.use(
       const refreshToken = localStorage.getItem('refresh_token');
       if (refreshToken) {
         try {
-          const response = await axios.post('http://localhost:8000/api/token/refresh/', {
+          const response = await axios.post('http://localhost/api/token/refresh/', {
             refresh: refreshToken,
           });
           localStorage.setItem('access_token', response.data.access);

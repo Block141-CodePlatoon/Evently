@@ -7,20 +7,24 @@ import DashboardNavbar from 'components/DashboardNavbar';
 import Footer from 'components/Footer';
 import CustomCalendar from 'components/CustomCalendar/CustomCalendar';
 import dayjs from 'dayjs';
-import axios from 'axios'; // Ensure axios is imported
+import axios from '../../axiosSetup'; // Ensure axios is imported from axiosSetup.js
 
 function Dashboard({ children }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]); // Initialize as an empty array
 
   // Fetch user's current events
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('/events/'); // Use the correct API endpoint
-        setEvents(response.data);
+        console.log("Fetching from /events/");
+        const response = await axios.get('/events/'); // Use the correct API endpoint without /api
+        console.log("Events data:", response.data); // Log the events data
+        // Ensure the response data is an array
+        setEvents(Array.isArray(response.data.result) ? response.data.result : []);
       } catch (error) {
         console.error('Error fetching events:', error);
+        setEvents([]); // Ensure events is set to an empty array in case of an error
       }
     };
 
@@ -46,7 +50,7 @@ function Dashboard({ children }) {
               .filter(event => dayjs(event.date).isSame(selectedDate, 'day'))
               .map(event => (
                 <Typography key={event.id} variant="body2">
-                  {event.label}
+                  {event.title} {/* Changed from event.label to event.title */}
                 </Typography>
               ))}
           </Box>

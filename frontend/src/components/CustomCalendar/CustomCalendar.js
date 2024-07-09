@@ -59,7 +59,7 @@ const CustomCalendar = ({ events, onDateSelect, selectedDate }) => {
               </Typography>
               {getEventsForDate(date).map(event => (
                 <Typography key={event.id} variant="body2">
-                  {event.label}
+                  {event.title} {/* Changed from event.label to event.title */}
                 </Typography>
               ))}
             </Paper>

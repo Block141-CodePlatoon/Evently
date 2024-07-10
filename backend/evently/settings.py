@@ -28,6 +28,23 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'authorization',
+    'content-type',
+    'x-csrftoken',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_CREDENTIALS = True
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,23 +98,6 @@ LOGOUT_REDIRECT_URL = '/'
 #     'http://localhost:3000',
 #     'http://127.0.0.1:3000',
 # ]
-
-CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'authorization',
-    'content-type',
-    'x-csrftoken',
-]
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'evently.urls'
 

@@ -4,7 +4,7 @@ import React from 'react';
 import { Box, Grid, Typography, Paper, Button } from '@mui/material';
 import dayjs from 'dayjs';
 
-const CustomCalendar = ({ events, onDateSelect, selectedDate }) => {
+const CustomCalendar = ({ events, onDateSelect, selectedDate, onEventClick }) => {
   const [currentMonth, setCurrentMonth] = React.useState(dayjs().startOf('month'));
 
   const startOfMonth = currentMonth.startOf('month');
@@ -58,8 +58,19 @@ const CustomCalendar = ({ events, onDateSelect, selectedDate }) => {
                 {date.format('D')}
               </Typography>
               {getEventsForDate(date).map(event => (
-                <Typography key={event.id} variant="body2">
-                  {event.title} {/* Changed from event.label to event.title */}
+                <Typography
+                  key={event.id}
+                  variant="body2"
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': {
+                      color: 'blue',
+                      textDecoration: 'underline',
+                    },
+                  }}
+                  onClick={() => onEventClick(event.id)}
+                >
+                  {event.title}
                 </Typography>
               ))}
             </Paper>

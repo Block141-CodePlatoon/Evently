@@ -77,10 +77,13 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     'http://127.0.0.1:3000',
+# ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'authorization',
     'content-type',

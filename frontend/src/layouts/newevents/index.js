@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import DashboardLayout from 'components/DashboardLayout';
-import DashboardNavbar from 'components/DashboardNavbar';
+import NewEventLayoutt from 'components/NewEventLayoutLayout';
+import NewEventNavbar from 'components/NewEventNavbar';
 import Footer from 'components/Footer';
 
 function NewEventLayout({ children }) {
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <NewEventNavbar />
       <Box p={3}>
         {children}
       </Box>

@@ -8,10 +8,12 @@ import Footer from 'components/Footer';
 import CustomCalendar from 'components/CustomCalendar/CustomCalendar';
 import dayjs from 'dayjs';
 import axios from '../../axiosSetup'; // Ensure axios is imported from axiosSetup.js
+import { useNavigate } from 'react-router-dom'; // Use useNavigate
 
 function Dashboard({ children }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [events, setEvents] = useState([]); // Initialize as an empty array
+  const navigate = useNavigate(); // Use useNavigate hook
 
   // Fetch user's current events
   useEffect(() => {
@@ -35,6 +37,10 @@ function Dashboard({ children }) {
     setSelectedDate(date);
   };
 
+  const handleEventClick = (eventId) => {
+    navigate(`/events/${eventId}`); // Navigate to the event page
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -43,13 +49,18 @@ function Dashboard({ children }) {
           Evently Calendar
         </Typography>
         <Box flexGrow={1} display="flex" flexDirection="column" alignItems="center" width="100%">
-          <CustomCalendar events={events} onDateSelect={handleDateSelect} selectedDate={selectedDate} />
+          <CustomCalendar 
+            events={events} 
+            onDateSelect={handleDateSelect} 
+            selectedDate={selectedDate} 
+            onEventClick={handleEventClick} // Pass the handleEventClick to CustomCalendar
+          />
           <Box mt={2}>
             <Typography variant="h6">Events on {selectedDate.format('MMMM DD, YYYY')}</Typography>
             {events
               .filter(event => dayjs(event.date).isSame(selectedDate, 'day'))
               .map(event => (
-                <Typography key={event.id} variant="body2">
+                <Typography key={event.id} variant="body2" onClick={() => handleEventClick(event.id)}>
                   {event.title} {/* Changed from event.label to event.title */}
                 </Typography>
               ))}

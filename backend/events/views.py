@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from .models import Event
 from .serializers import EventSerializer
 from .utils import send_email
+from .utils import get_directions
 
 class EventList(APIView):
     def get(self, request):
@@ -54,3 +55,20 @@ class SendEmailAPIView(APIView):
             send_email(guest.email, subject, content, from_email=host_email)
         
         return Response({"message": "Emails sent successfully to all guests."}, status=200)
+
+
+class DirectionsAPIView(APIView):
+    def get(self, request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        origin = event.location
+        destination = request.GET.get('destination')
+
+        if not destination:
+            return Response({"error": "Destination not provided."}, status=400)
+
+        directions = get_directions(origin, destination)
+        
+        if directions is None:
+            return Response({"error": "Failed to retrieve directions."}, status=500)
+        
+        return Response({"directions": directions}, status=200)

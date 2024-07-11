@@ -1,18 +1,13 @@
-// react-router-dom components
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
+import Icon from '@mui/material/Icon';
+import MDBox from 'components/MDBox';
+import MDTypography from 'components/MDTypography';
 
-// prop-types is a library for typechecking of props.
-import PropTypes from "prop-types";
-
-// @mui material components
-import { Breadcrumbs as MuiBreadcrumbs } from "@mui/material";
-import Icon from "@mui/material/Icon";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-
-function Breadcrumbs({ icon, title, route, light }) {
+function EventBreadcrumbs({ icon, title, route, light, eventName }) {
+  console.log('EventBreadcrumbs props:', { icon, title, route, light, eventName });
   const routes = route.slice(0, -1);
 
   return (
@@ -57,7 +52,7 @@ function Breadcrumbs({ icon, title, route, light }) {
           color={light ? "white" : "dark"}
           sx={{ lineHeight: 0 }}
         >
-          {title.replace("-", " ")}
+          {eventName || title.replace("-", " ")}
         </MDTypography>
       </MuiBreadcrumbs>
       <MDTypography
@@ -67,23 +62,25 @@ function Breadcrumbs({ icon, title, route, light }) {
         color={light ? "white" : "dark"}
         noWrap
       >
-        {title.replace("-", " ")}
+        {eventName || title.replace("-", " ")}
       </MDTypography>
     </MDBox>
   );
 }
 
 // Setting default values for the props of Breadcrumbs
-Breadcrumbs.defaultProps = {
+EventBreadcrumbs.defaultProps = {
   light: false,
+  eventName: '',
 };
 
 // Typechecking props for the Breadcrumbs
-Breadcrumbs.propTypes = {
+EventBreadcrumbs.propTypes = {
   icon: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
   route: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   light: PropTypes.bool,
+  eventName: PropTypes.string,
 };
 
-export default Breadcrumbs;
+export default EventBreadcrumbs;

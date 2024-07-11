@@ -7,7 +7,6 @@ import MDBox from 'components/MDBox';
 import MDTypography from 'components/MDTypography';
 
 function EventBreadcrumbs({ icon, title, route, light, eventName }) {
-  console.log('EventBreadcrumbs props:', { icon, title, route, light, eventName });
   const routes = route.slice(0, -1);
 
   return (

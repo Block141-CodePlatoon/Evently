@@ -40,13 +40,9 @@ export default function SignUp() {
       password2: data.get('password2'),
     };
 
-    console.log('Form data:', data);
-    console.log('Credentials:', credentials);
-
     try {
       console.log('Sending POST request to /accounts/register/');
       const response = await axios.post('/accounts/register/', credentials);
-      console.log('Response received:', response);
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);

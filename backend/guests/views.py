@@ -45,3 +45,10 @@ class GuestDetail(APIView):
         guest = get_object_or_404(Guest.objects.all(), pk=pk)
         guest.delete()
         return Response({"result": f"Guest {pk} deleted"}, status=204)
+    
+class EventGuestList(APIView):
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        guests = event.guests.all()  # Use the related_name to access guests
+        serializer = GuestSerializer(guests, many=True)
+        return Response({"result": serializer.data})

@@ -7,26 +7,23 @@ import DashboardNavbar from 'components/DashboardNavbar';
 import Footer from 'components/Footer';
 import CustomCalendar from 'components/CustomCalendar/CustomCalendar';
 import dayjs from 'dayjs';
-import axios from '../../axiosSetup'; // Ensure axios is imported from axiosSetup.js
-import { useNavigate } from 'react-router-dom'; // Use useNavigate
+import axios from '../../axiosSetup'; 
+import { useNavigate } from 'react-router-dom'; 
 
 function Dashboard({ children }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
-  const [events, setEvents] = useState([]); // Initialize as an empty array
-  const navigate = useNavigate(); // Use useNavigate hook
+  const [events, setEvents] = useState([]); 
+  const navigate = useNavigate(); 
 
-  // Fetch user's current events
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         console.log("Fetching from /events/");
-        const response = await axios.get('/events/'); // Use the correct API endpoint without /api
-        console.log("Events data:", response.data); // Log the events data
-        // Ensure the response data is an array
+        const response = await axios.get('/events/'); 
         setEvents(Array.isArray(response.data.result) ? response.data.result : []);
       } catch (error) {
         console.error('Error fetching events:', error);
-        setEvents([]); // Ensure events is set to an empty array in case of an error
+        setEvents([]); 
       }
     };
 
@@ -38,7 +35,7 @@ function Dashboard({ children }) {
   };
 
   const handleEventClick = (eventId) => {
-    navigate(`/events/${eventId}`); // Navigate to the event page
+    navigate(`/events/${eventId}`); 
   };
 
   return (

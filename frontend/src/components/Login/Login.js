@@ -43,18 +43,13 @@ export default function SignIn() {
       password: data.get('password'),
     };
 
-    console.log('Form data:', data);
-    console.log('Credentials:', credentials);
-
     try {
       console.log('Sending POST request to /token/');
       const response = await axios.post('/token/', credentials);
-      console.log('Response received:', response);
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
-      console.log('Tokens stored and Authorization header set');
 
       navigate('/home'); 
     } catch (error) {

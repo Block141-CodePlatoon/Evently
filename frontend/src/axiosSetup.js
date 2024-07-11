@@ -20,10 +20,6 @@ instance.interceptors.request.use(
   config => {
     const token = localStorage.getItem('access_token');
     const csrfToken = getCSRFToken();
-    
-    console.log('Request Interceptor:');
-    console.log('Access Token:', token);
-    console.log('CSRF Token:', csrfToken);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

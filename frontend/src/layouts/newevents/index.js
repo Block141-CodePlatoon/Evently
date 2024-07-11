@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Icon from '@mui/material/Icon'; // Import Icon
+import Icon from '@mui/material/Icon'; 
 import NewEventNavbar from 'components/NewEventNavbar';
 import { useMaterialUIController } from 'context';
-
 import Footer from 'components/Footer';
 import Sidenav from 'components/Sidenav';
-import axios from '../../axiosSetup'; // Ensure axios is imported from axiosSetup.js
-import Dashboard from 'layouts/dashboard'; // Import Dashboard or define it if it is a local component
-import CreateEvent from 'components/CreateEvent/CreateEvent'; // Import CreateEvent if it exists
-import brandWhite from 'assets/images/logo-ct.svg'; // Import brand logo
-import brandDark from 'assets/images/logo-ct-dark.svg'; // Import brand logo
+import axios from '../../axiosSetup'; 
+import Dashboard from 'layouts/dashboard'; 
+import CreateEvent from 'components/CreateEvent/CreateEvent'; 
+import brandWhite from 'assets/images/logo-ct.svg';
+import brandDark from 'assets/images/logo-ct-dark.svg'; 
 
 const dummyRoutes = [
   {
@@ -21,7 +20,7 @@ const dummyRoutes = [
     key: "home",
     icon: <Icon>home</Icon>,
     route: "/home",
-    component: <Dashboard />, // Ensure this is the correct component
+    component: <Dashboard />, 
   },
   {
     type: "collapse",
@@ -29,9 +28,8 @@ const dummyRoutes = [
     key: "create-event",
     icon: <Icon>add</Icon>,
     route: "/create-event",
-    component: <CreateEvent />, // Ensure this is the correct component
+    component: <CreateEvent />, 
   },
-  // Add more routes as needed
 ];
 
 function NewEventLayout2({ children }) {
@@ -49,7 +47,6 @@ function NewEventLayout2({ children }) {
       try {
         console.log(`Fetching event data for event ID: ${id}`);
         const response = await axios.get(`/events/${id}/`);
-        console.log('Fetched event data:', response.data);
         setEventName(response.data.result.title);
       } catch (error) {
         console.error('Error fetching event data:', error);
@@ -64,8 +61,8 @@ function NewEventLayout2({ children }) {
   return (
     <>
       <Sidenav 
-        color="info" // Adjust the color as needed
-        brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite} // Use brandDark or brandWhite based on your theme
+        color="info" 
+        brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
         brandName="Evently"
         routes={dummyRoutes} 
       />
@@ -74,15 +71,15 @@ function NewEventLayout2({ children }) {
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
-          marginLeft: pxToRem(120), // Adjust this value based on your sidenav width
+          marginLeft: pxToRem(120), 
           [breakpoints.up('xl')]: {
             marginLeft: pxToRem(274),
           },
         })}
       >
-        <NewEventNavbar eventName={eventName} /> {/* Pass eventName as a prop */}
+        <NewEventNavbar eventName={eventName} /> 
         <Box component="main" flexGrow={1} p={3} mt={3}>
-          {React.cloneElement(children, { eventName })} {/* Pass eventName as a prop to children */}
+          {React.cloneElement(children, { eventName })} 
         </Box>
         <Footer />
       </Box>

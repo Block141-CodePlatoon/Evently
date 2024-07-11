@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Icon from '@mui/material/Icon';
@@ -130,7 +130,7 @@ export default function App() {
             path="/create-event"
             element={<NewEventLayout><CreateEvent onEventCreated={handleEventCreated} /></NewEventLayout>}
           />
-          <Route path="/events/:id" element={<NewEventLayout><EventPage /></NewEventLayout>} />
+          <Route path="/events/:id" element={<NewEventLayout><EventPageWrapper /></NewEventLayout>} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -162,8 +162,14 @@ export default function App() {
           path="/create-event"
           element={<NewEventLayout><CreateEvent onEventCreated={handleEventCreated} /></NewEventLayout>}
         />
-        <Route path="/events/:id" element={<NewEventLayout><EventPage /></NewEventLayout>} />
+        <Route path="/events/:id" element={<NewEventLayout><EventPageWrapper /></NewEventLayout>} />
       </Routes>
     </ThemeProvider>
   );
 }
+
+// EventPageWrapper to pass eventId prop
+const EventPageWrapper = () => {
+  const { id } = useParams();
+  return <EventPage eventId={id} />;
+};

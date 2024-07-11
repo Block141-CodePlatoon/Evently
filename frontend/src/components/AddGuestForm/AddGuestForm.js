@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, TextField, Button, Typography } from '@mui/material';
+import { styled } from '@mui/system';
 import axios from '../../axiosSetup';
+
+const WhiteTextButton = styled(Button)({
+  color: 'white',
+});
 
 const AddGuestForm = ({ eventId, onGuestAdded }) => {
   const [name, setName] = useState('');
@@ -13,13 +18,14 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
     setError('');
 
     try {
+      console.log('Guest data to be sent:', { name, email, event: eventId });
       const response = await axios.post('/guests/', {
         name,
         email,
         event: eventId,
       });
       console.log('Guest added:', response.data);
-      onGuestAdded(); // Notify parent to refresh the guest list
+      onGuestAdded();
       setName('');
       setEmail('');
     } catch (error) {
@@ -46,9 +52,13 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
         fullWidth
         sx={{ mb: 2 }}
       />
-      <Button type="submit" variant="contained" color="primary">
+      <WhiteTextButton
+        type="submit"
+        variant="contained"
+        color="primary"
+      >
         Add Guest
-      </Button>
+      </WhiteTextButton>
     </Box>
   );
 };

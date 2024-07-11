@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Typography, Card, CardContent, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Box, Typography, Card, CardContent, List, ListItem, ListItemText, Divider, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete'; // Import Delete Icon
 import axios from '../../axiosSetup';
 import AddGuestForm from 'components/AddGuestForm/AddGuestForm';
 
 const EventPage = ({ eventId }) => {
   const [event, setEvent] = useState(null);
   const [guests, setGuests] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [guestToDelete, setGuestToDelete] = useState(null);
 
   useEffect(() => {
     const fetchEventData = async () => {
@@ -37,6 +40,26 @@ const EventPage = ({ eventId }) => {
     fetchGuestsData(); // Refresh the guest list when a new guest is added
   };
 
+  const handleGuestDelete = async () => {
+    try {
+      await axios.delete(`/guests/${guestToDelete}/`);
+      fetchGuestsData(); // Refresh the guest list after deletion
+      setOpenDialog(false); // Close the dialog
+    } catch (error) {
+      console.error('Error deleting guest:', error);
+    }
+  };
+
+  const handleOpenDialog = (guestId) => {
+    setGuestToDelete(guestId);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setGuestToDelete(null);
+  };
+
   if (!event) {
     return <Typography>Loading...</Typography>;
   }
@@ -63,7 +86,13 @@ const EventPage = ({ eventId }) => {
             ) : (
               guests.map((guest) => (
                 <React.Fragment key={guest.id}>
-                  <ListItem>
+                  <ListItem
+                    secondaryAction={
+                      <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDialog(guest.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    }
+                  >
                     <ListItemText primary={guest.name} secondary={guest.email} />
                   </ListItem>
                   <Divider />
@@ -74,6 +103,25 @@ const EventPage = ({ eventId }) => {
         </CardContent>
       </Card>
       <AddGuestForm eventId={event.id} onGuestAdded={handleGuestAdded} /> {/* Include the AddGuestForm */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this guest? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleGuestDelete} color="primary" autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -5,11 +5,12 @@ import { styled } from '@mui/system';
 import axios from '../../axiosSetup';
 
 const WhiteTextButton = styled(Button)({
-  color: 'white',
+  color: 'white', // Ensure text color is white
 });
 
 const AddGuestForm = ({ eventId, onGuestAdded }) => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
@@ -17,16 +18,21 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
     e.preventDefault();
     setError('');
 
+    const guestData = {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      event: eventId,
+    };
+
+    console.log('Guest data to be sent:', guestData);
+
     try {
-      console.log('Guest data to be sent:', { name, email, event: eventId });
-      const response = await axios.post('/guests/', {
-        name,
-        email,
-        event: eventId,
-      });
+      const response = await axios.post('/guests/', guestData);
       console.log('Guest added:', response.data);
-      onGuestAdded();
-      setName('');
+      onGuestAdded(); // Notify parent to refresh the guest list
+      setFirstName('');
+      setLastName('');
       setEmail('');
     } catch (error) {
       console.error('Error adding guest:', error);
@@ -39,9 +45,16 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
       <Typography variant="h6">Add Guest</Typography>
       {error && <Typography color="error">{error}</Typography>}
       <TextField
-        label="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        label="First Name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        fullWidth
+        sx={{ mb: 2 }}
+      />
+      <TextField
+        label="Last Name"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
         fullWidth
         sx={{ mb: 2 }}
       />

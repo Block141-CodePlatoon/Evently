@@ -1,40 +1,75 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Typography, Card, CardContent, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Box, Typography, Card, CardContent, List, ListItem, ListItemText, Divider, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import axios from '../../axiosSetup';
 import AddGuestForm from 'components/AddGuestForm/AddGuestForm';
 
 const EventPage = ({ eventId }) => {
   const [event, setEvent] = useState(null);
   const [guests, setGuests] = useState([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openAddGuestDialog, setOpenAddGuestDialog] = useState(false);
+  const [guestToDelete, setGuestToDelete] = useState(null);
 
   useEffect(() => {
-    const fetchEventData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`/events/${eventId}/`);
-        console.log('Fetched event data:', response.data);
-        setEvent(response.data.result);
+        const eventResponse = await axios.get(`/events/${eventId}/`);
+        console.log('Fetched event data:', eventResponse.data);
+        setEvent(eventResponse.data.result);
+
+        const guestsResponse = await axios.get(`/events/${eventId}/guests/`);
+        console.log('Fetched guests data:', guestsResponse.data);
+        setGuests(guestsResponse.data.result);
       } catch (error) {
-        console.error('Error fetching event data:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchEventData();
-    fetchGuestsData(); // Initial fetch of guests data
+    fetchData();
   }, [eventId]);
 
-  const fetchGuestsData = async () => {
+  const handleGuestAdded = async () => {
     try {
-      const response = await axios.get(`/events/${eventId}/guests/`);
-      console.log('Fetched guests data:', response.data);
-      setGuests(response.data.result);
+      const guestsResponse = await axios.get(`/events/${eventId}/guests/`);
+      console.log('Fetched guests data:', guestsResponse.data);
+      setGuests(guestsResponse.data.result);
+      setOpenAddGuestDialog(false);
     } catch (error) {
       console.error('Error fetching guests data:', error);
     }
   };
 
-  const handleGuestAdded = () => {
-    fetchGuestsData(); // Refresh the guest list when a new guest is added
+  const handleGuestDelete = async () => {
+    try {
+      await axios.delete(`/guests/${guestToDelete}/`);
+      const guestsResponse = await axios.get(`/events/${eventId}/guests/`);
+      console.log('Fetched guests data:', guestsResponse.data);
+      setGuests(guestsResponse.data.result);
+      setOpenDeleteDialog(false);
+    } catch (error) {
+      console.error('Error deleting guest:', error);
+    }
+  };
+
+  const handleOpenDeleteDialog = (guestId) => {
+    setGuestToDelete(guestId);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setGuestToDelete(null);
+  };
+
+  const handleOpenAddGuestDialog = () => {
+    setOpenAddGuestDialog(true);
+  };
+
+  const handleCloseAddGuestDialog = () => {
+    setOpenAddGuestDialog(false);
   };
 
   if (!event) {
@@ -56,14 +91,25 @@ const EventPage = ({ eventId }) => {
       </Card>
       <Card variant="outlined">
         <CardContent>
-          <Typography variant="h6">Guest List</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">Guest List</Typography>
+            <IconButton edge="end" aria-label="add" onClick={handleOpenAddGuestDialog}>
+              <AddIcon />
+            </IconButton>
+          </Box>
           <List>
             {guests.length === 0 ? (
               <Typography variant="body2">No guests found.</Typography>
             ) : (
               guests.map((guest) => (
                 <React.Fragment key={guest.id}>
-                  <ListItem>
+                  <ListItem
+                    secondaryAction={
+                      <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(guest.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    }
+                  >
                     <ListItemText primary={guest.name} secondary={guest.email} />
                   </ListItem>
                   <Divider />
@@ -73,7 +119,39 @@ const EventPage = ({ eventId }) => {
           </List>
         </CardContent>
       </Card>
-      <AddGuestForm eventId={event.id} onGuestAdded={handleGuestAdded} /> {/* Include the AddGuestForm */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this guest? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleGuestDelete} color="primary" autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openAddGuestDialog}
+        onClose={handleCloseAddGuestDialog}
+      >
+        <DialogTitle>Add Guest</DialogTitle>
+        <DialogContent>
+          <AddGuestForm eventId={event.id} onGuestAdded={handleGuestAdded} /> {/* Move AddGuestForm inside the dialog */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAddGuestDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

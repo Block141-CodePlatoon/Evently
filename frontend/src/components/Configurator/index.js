@@ -202,7 +202,7 @@ function Configurator() {
         <MDBox mt={3} mb={2}>
           <MDButton
             component={Link}
-            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            href="https://github.com/Block141-CodePlatoon/Evently"
             target="_blank"
             rel="noreferrer"
             color={darkMode ? "light" : "dark"}

@@ -7,6 +7,10 @@ import NewEventsLayout from 'layouts/newevents'; // Ensure correct path
 import CreateEvent from 'components/CreateEvent/CreateEvent'; // Ensure correct path
 import EventPage from 'components/EventPage/EventPage'; // Ensure correct path
 
+const handleEventCreated = () => {
+  // Define what happens when an event is created
+};
+
 const routes = [
   {
     type: 'collapse',
@@ -24,7 +28,7 @@ const routes = [
     route: '/create-event',
     component: (
       <NewEventsLayout>
-        <CreateEvent />
+        <CreateEvent onEventCreated={handleEventCreated} />
       </NewEventsLayout>
     ),
   },

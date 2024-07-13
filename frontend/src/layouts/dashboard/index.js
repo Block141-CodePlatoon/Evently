@@ -8,8 +8,7 @@ import CustomCalendar from 'components/CustomCalendar/CustomCalendar';
 import dayjs from 'dayjs';
 import axios from '../../axiosSetup'; 
 import { useNavigate } from 'react-router-dom'; 
-import MyAccount from 'components/MyAccount/MyAccount'; // Ensure correct path
-
+import MyAccount from 'components/MyAccount/MyAccount'; 
 function Dashboard() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [events, setEvents] = useState([]);

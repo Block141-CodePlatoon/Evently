@@ -1,52 +1,41 @@
-// components/CreateEvent/CreateEvent.js
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
-import axios from '../../axiosSetup';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import axios from '../../axiosSetup';
+import { useNavigate } from 'react-router-dom';
 
-const CreateEvent = ({ onEventCreated }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+const EditEvent = ({ event, onEventEdited }) => {
+  const [title, setTitle] = useState(event.title);
+  const [description, setDescription] = useState(event.description);
   const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [host, setHost] = useState(null);
+  const [location, setLocation] = useState(event.location);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      setHost(decodedToken.user_id);
-    }
-  }, []);
+    const formattedDate = dayjs(event.date).format('YYYY-MM-DDTHH:mm');
+    setDate(formattedDate);
+  }, [event.date]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const eventData = {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updatedEvent = {
       title,
       description,
       date,
       location,
-      host,
     };
 
     try {
-      await axios.post('/events/', eventData);
+      await axios.put(`/events/${event.id}/`, updatedEvent);
 
-      setTitle('');
-      setDescription('');
-      setDate('');
-      setLocation('');
-
-      if (onEventCreated) {
-        onEventCreated();
+      if (onEventEdited) {
+        onEventEdited();
       }
 
-      navigate('/home');
+      window.location.reload();
     } catch (error) {
-      console.error('Error creating event:', error);
+      console.error('Error updating event:', error);
       if (error.response) {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
@@ -61,7 +50,7 @@ const CreateEvent = ({ onEventCreated }) => {
 
   return (
     <Box>
-      <Typography variant="h4">Create Event</Typography>
+      <Typography variant="h4">Edit Event</Typography>
       <form onSubmit={handleSubmit}>
         <Box mb={2}>
           <TextField
@@ -92,9 +81,6 @@ const CreateEvent = ({ onEventCreated }) => {
             InputLabelProps={{
               shrink: true,
             }}
-            inputProps={{
-              placeholder: '',
-            }}
           />
         </Box>
         <Box mb={2}>
@@ -112,15 +98,16 @@ const CreateEvent = ({ onEventCreated }) => {
           color="primary"
           sx={{ color: 'white' }}
         >
-          Create Event
+          Save Changes
         </Button>
       </form>
     </Box>
   );
 };
 
-CreateEvent.propTypes = {
-  onEventCreated: PropTypes.func.isRequired,
+EditEvent.propTypes = {
+  event: PropTypes.object.isRequired,
+  onEventEdited: PropTypes.func.isRequired,
 };
 
-export default CreateEvent;
+export default EditEvent;

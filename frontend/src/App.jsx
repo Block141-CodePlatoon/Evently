@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Icon from '@mui/material/Icon';
@@ -19,9 +19,7 @@ import brandWhite from 'assets/images/logo-ct.svg';
 import brandDark from 'assets/images/logo-ct-dark.svg';
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
-import NewEventLayout from 'layouts/newevents';
-import CreateEvent from 'components/CreateEvent/CreateEvent';
-import EventPage from 'components/EventPage/EventPage';
+import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -38,7 +36,7 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-  const [eventCreated, setEventCreated] = useState(false); // State for tracking event creation
+  const [eventCreated, setEventCreated] = useState(false);
 
   useMemo(() => {
     const cacheRtl = createCache({
@@ -81,7 +79,7 @@ export default function App() {
       }
 
       if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+        return <Route key={route.key} path={route.route} element={<PrivateRoute element={route.component} />} />;
       }
 
       return null;
@@ -98,7 +96,7 @@ export default function App() {
   const shouldRenderSidenav = !['/login', '/signup'].includes(pathname);
 
   const handleEventCreated = () => {
-    setEventCreated((prev) => !prev); // Toggle the state to force a rerender
+    setEventCreated((prev) => !prev);
   };
 
   return direction === 'rtl' ? (
@@ -114,7 +112,7 @@ export default function App() {
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
-              eventCreated={eventCreated} // Pass the state to Sidenav
+              eventCreated={eventCreated}
             />
             <Configurator />
             {configsButton}
@@ -126,11 +124,6 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/home" />} />
-          <Route
-            path="/create-event"
-            element={<NewEventLayout><CreateEvent onEventCreated={handleEventCreated} /></NewEventLayout>}
-          />
-          <Route path="/events/:id" element={<NewEventLayout><EventPageWrapper /></NewEventLayout>} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -146,7 +139,7 @@ export default function App() {
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
-            eventCreated={eventCreated} // Pass the state to Sidenav
+            eventCreated={eventCreated}
           />
           <Configurator />
           {configsButton}
@@ -158,18 +151,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<Navigate to="/home" />} />
-        <Route
-          path="/create-event"
-          element={<NewEventLayout><CreateEvent onEventCreated={handleEventCreated} /></NewEventLayout>}
-        />
-        <Route path="/events/:id" element={<NewEventLayout><EventPageWrapper /></NewEventLayout>} />
       </Routes>
     </ThemeProvider>
   );
 }
-
-// EventPageWrapper to pass eventId prop
-const EventPageWrapper = () => {
-  const { id } = useParams();
-  return <EventPage eventId={id} />;
-};

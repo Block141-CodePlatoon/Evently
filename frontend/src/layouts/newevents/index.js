@@ -45,7 +45,6 @@ function NewEventLayout2({ children }) {
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        console.log(`Fetching event data for event ID: ${id}`);
         const response = await axios.get(`/events/${id}/`);
         setEventName(response.data.result.title);
       } catch (error) {

@@ -41,13 +41,11 @@ export default function SignUp() {
     };
 
     try {
-      console.log('Sending POST request to /accounts/register/');
       const response = await axios.post('/accounts/register/', credentials);
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
-      console.log('Tokens stored and Authorization header set');
 
       navigate('/home'); 
     } catch (error) {

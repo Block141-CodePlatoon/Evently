@@ -18,7 +18,6 @@ function Dashboard({ children }) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        console.log("Fetching from /events/");
         const response = await axios.get('/events/'); 
         setEvents(Array.isArray(response.data.result) ? response.data.result : []);
       } catch (error) {

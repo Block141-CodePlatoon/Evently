@@ -25,11 +25,8 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
       event: eventId,
     };
 
-    console.log('Guest data to be sent:', guestData);
-
     try {
       const response = await axios.post('/guests/', guestData);
-      console.log('Guest added:', response.data);
       onGuestAdded(); // Notify parent to refresh the guest list
       setFirstName('');
       setLastName('');

@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../axiosSetup'; // Ensure this path is correct
+import axios from '../../axiosSetup';
 import tiredImage from '../../assets/images/tired.webp';
 
 function Copyright(props) {
@@ -44,14 +44,13 @@ export default function SignIn() {
     };
 
     try {
-      console.log('Sending POST request to /token/');
       const response = await axios.post('/token/', credentials);
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
 
-      navigate('/home'); 
+      navigate('/home');
     } catch (error) {
       console.error('Login error:', error);
       if (error.response) {

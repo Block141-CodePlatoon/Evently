@@ -12,6 +12,7 @@ import MDInput from "components/MDInput";
 import Breadcrumbs from "components/Breadcrumbs";
 import { navbar, navbarContainer, navbarRow, navbarIconButton, navbarMobileMenu } from "components/DashboardNavbar/styles";
 import { useMaterialUIController, setTransparentNavbar, setMiniSidenav, setOpenConfigurator } from "context";
+import { logout } from 'utils/auth';
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -48,9 +49,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseAccountMenu = () => setAccountMenu(null);
 
   const handleLogout = () => {
-    // Clear user data (example: localStorage)
-    localStorage.removeItem("userToken"); // Adjust this as per your app's storage key
-    // Redirect to sign-in page
+    logout();
     navigate("/login");
   };
 

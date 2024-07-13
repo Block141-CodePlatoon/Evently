@@ -2,28 +2,50 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import axios from '../../axiosSetup';
+import { useNavigate } from 'react-router-dom';
 
 const EditEvent = ({ event, onEventEdited }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [date, setDate] = useState('');
   const [location, setLocation] = useState(event.location);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const formattedDate = dayjs(event.date).format('YYYY-MM-DDTHH:mm');
     setDate(formattedDate);
   }, [event.date]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedEvent = {
-      ...event,
       title,
       description,
       date,
       location,
     };
-    onEventEdited(updatedEvent);
+
+    try {
+      await axios.put(`/events/${event.id}/`, updatedEvent);
+
+      if (onEventEdited) {
+        onEventEdited();
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error('Error updating event:', error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
+    }
   };
 
   return (

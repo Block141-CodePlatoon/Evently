@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { Box, Typography, Card, CardContent, List, ListItem, ListItemText, Divider, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from '../../axiosSetup';
 import AddGuestForm from 'components/AddGuestForm/AddGuestForm';
 
 const EventPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [guests, setGuests] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -120,7 +120,7 @@ const EventPage = () => {
                       </IconButton>
                     }
                   >
-                    <ListItemText primary={guest.name} secondary={guest.email} />
+                    <ListItemText primary={`${guest.first_name} ${guest.last_name}`} secondary={guest.email} />
                   </ListItem>
                   <Divider />
                 </React.Fragment>

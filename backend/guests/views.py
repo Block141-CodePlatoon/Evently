@@ -1,5 +1,3 @@
-# guests/views.py
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
@@ -21,12 +19,11 @@ class GuestList(APIView):
         serializer = GuestSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             guest = serializer.save()
-            # Send email after guest is created
             event = get_object_or_404(Event, id=guest.event.id)
             host_email = event.host.email
             to_email = guest.email
             subject = f"Invitation to {event.title}"
-            content = f"Dear {guest.name},<br><br>You are invited to {event.title} on {event.date}.<br>Location: {event.location}.<br><br>Best regards,<br>{event.host.username}"
+            content = f"Dear {guest.first_name} {guest.last_name},<br><br>You are invited to {event.title} on {event.date}.<br>Location: {event.location}.<br><br>Best regards,<br>{event.host.username}"
             try:
                 send_email(to_email, subject, content, from_email=host_email)
             except Exception as e:

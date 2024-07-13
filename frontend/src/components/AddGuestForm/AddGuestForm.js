@@ -13,10 +13,12 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     const guestData = {
       first_name: firstName,
@@ -31,9 +33,15 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
       setFirstName('');
       setLastName('');
       setEmail('');
+      setLoading(false);
     } catch (error) {
       console.error('Error adding guest:', error);
-      setError('Failed to add guest. Please try again.');
+      if (error.response && error.response.data) {
+        setError(`Failed to add guest: ${error.response.data.message || 'Please try again.'}`);
+      } else {
+        setError('Failed to add guest. Please try again.');
+      }
+      setLoading(false);
     }
   };
 
@@ -47,6 +55,7 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
         onChange={(e) => setFirstName(e.target.value)}
         fullWidth
         sx={{ mb: 2 }}
+        disabled={loading}
       />
       <TextField
         label="Last Name"
@@ -54,6 +63,7 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
         onChange={(e) => setLastName(e.target.value)}
         fullWidth
         sx={{ mb: 2 }}
+        disabled={loading}
       />
       <TextField
         label="Email"
@@ -61,13 +71,15 @@ const AddGuestForm = ({ eventId, onGuestAdded }) => {
         onChange={(e) => setEmail(e.target.value)}
         fullWidth
         sx={{ mb: 2 }}
+        disabled={loading}
       />
       <WhiteTextButton
         type="submit"
         variant="contained"
         color="primary"
+        disabled={loading}
       >
-        Add Guest
+        {loading ? 'Adding...' : 'Add Guest'}
       </WhiteTextButton>
     </Box>
   );

@@ -40,12 +40,10 @@ const CreateEvent = ({ onEventCreated }) => {
       setDate('');
       setLocation('');
 
-      // Call the callback to refresh the parent component
       if (onEventCreated) {
         onEventCreated();
       }
 
-      // Navigate to /home
       navigate('/home');
     } catch (error) {
       console.error('Error creating event:', error);
@@ -67,7 +65,7 @@ const CreateEvent = ({ onEventCreated }) => {
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
-    dateInputRef.current.blur();  // Close the date picker by removing focus
+    dateInputRef.current.blur();  
   };
 
   return (
@@ -121,7 +119,7 @@ const CreateEvent = ({ onEventCreated }) => {
           variant="contained"
           color="primary"
           sx={{ bgcolor: 'primary' }}
-          style={{ color: 'black' }} // Set text color to black
+          style={{ color: 'black' }} 
         >
           Create Event
         </Button>

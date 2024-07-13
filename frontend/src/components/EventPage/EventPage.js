@@ -1,12 +1,16 @@
+// components/EventPage/EventPage.js
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Typography, Card, CardContent, List, ListItem, ListItemText, Divider, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from '../../axiosSetup';
 import AddGuestForm from 'components/AddGuestForm/AddGuestForm';
 
-const EventPage = ({ eventId }) => {
+const EventPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [event, setEvent] = useState(null);
   const [guests, setGuests] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -15,26 +19,33 @@ const EventPage = ({ eventId }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!id || id === ':id') {
+        console.warn('Invalid event ID:', id);
+        return;
+      }
+      console.log(`Fetching event data for ID: ${id}`);
       try {
-        const eventResponse = await axios.get(`/events/${eventId}/`);
-        console.log('Fetched event data:', eventResponse.data);
+        const eventResponse = await axios.get(`/events/${id}/`);
+        console.log('Event response received:', eventResponse.data);
         setEvent(eventResponse.data.result);
 
-        const guestsResponse = await axios.get(`/events/${eventId}/guests/`);
-        console.log('Fetched guests data:', guestsResponse.data);
+        const guestsResponse = await axios.get(`/events/${id}/guests/`);
+        console.log('Guests response received:', guestsResponse.data);
         setGuests(guestsResponse.data.result);
       } catch (error) {
         console.error('Error fetching data:', error);
+        if (error.response && error.response.status === 404) {
+          navigate('/home'); // Redirect to home if event is not found
+        }
       }
     };
 
     fetchData();
-  }, [eventId]);
+  }, [id, navigate]);
 
   const handleGuestAdded = async () => {
     try {
-      const guestsResponse = await axios.get(`/events/${eventId}/guests/`);
-      console.log('Fetched guests data:', guestsResponse.data);
+      const guestsResponse = await axios.get(`/events/${id}/guests/`);
       setGuests(guestsResponse.data.result);
       setOpenAddGuestDialog(false);
     } catch (error) {
@@ -45,8 +56,7 @@ const EventPage = ({ eventId }) => {
   const handleGuestDelete = async () => {
     try {
       await axios.delete(`/guests/${guestToDelete}/`);
-      const guestsResponse = await axios.get(`/events/${eventId}/guests/`);
-      console.log('Fetched guests data:', guestsResponse.data);
+      const guestsResponse = await axios.get(`/events/${id}/guests/`);
       setGuests(guestsResponse.data.result);
       setOpenDeleteDialog(false);
     } catch (error) {
@@ -144,7 +154,7 @@ const EventPage = ({ eventId }) => {
       >
         <DialogTitle>Add Guest</DialogTitle>
         <DialogContent>
-          <AddGuestForm eventId={event.id} onGuestAdded={handleGuestAdded} /> {/* Move AddGuestForm inside the dialog */}
+          <AddGuestForm eventId={event.id} onGuestAdded={handleGuestAdded} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddGuestDialog} color="primary">

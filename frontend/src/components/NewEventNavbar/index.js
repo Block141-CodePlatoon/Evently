@@ -9,10 +9,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
-import EventBreadcrumbs from "components/EventBreadcrumbs"; // Ensure correct import
+import EventBreadcrumbs from "components/EventBreadcrumbs"; 
 import { navbar, navbarContainer, navbarRow, navbarIconButton, navbarMobileMenu } from "components/DashboardNavbar/styles";
 import { useMaterialUIController, setTransparentNavbar, setMiniSidenav, setOpenConfigurator } from "context";
-import axios from "axios"; // Ensure axios is correctly configured
+import { logout } from 'utils/auth';
 
 function NewEventNavbar({ absolute, light, isMini, eventName }) {
   const [navbarType, setNavbarType] = useState();
@@ -48,9 +48,7 @@ function NewEventNavbar({ absolute, light, isMini, eventName }) {
   const handleCloseAccountMenu = () => setAccountMenu(null);
 
   const handleLogout = () => {
-    // Clear user data (example: localStorage)
-    localStorage.removeItem("userToken"); // Adjust this as per your app's storage key
-    // Redirect to sign-in page
+    logout();
     navigate("/login");
   };
 
@@ -90,9 +88,6 @@ function NewEventNavbar({ absolute, light, isMini, eventName }) {
       onClose={handleCloseAccountMenu}
       sx={{ mt: 2 }}
     >
-      <MenuItem onClick={handleCloseAccountMenu}>
-        <Icon>account_circle</Icon>&nbsp;Profile
-      </MenuItem>
       <MenuItem onClick={handleCloseAccountMenu}>
         <Icon>settings</Icon>&nbsp;My account
       </MenuItem>

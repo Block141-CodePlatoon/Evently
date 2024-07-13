@@ -36,18 +36,19 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     const credentials = {
       username: data.get('email'),
-      password: data.get('password'),
+      first_name: data.get('firstName'),
+      last_name: data.get('lastName'),
+      email: data.get('email'),
+      password1: data.get('password'),
       password2: data.get('password2'),
     };
 
     try {
-      console.log('Sending POST request to /accounts/register/');
       const response = await axios.post('/accounts/register/', credentials);
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
-      console.log('Tokens stored and Authorization header set');
 
       navigate('/home'); 
     } catch (error) {

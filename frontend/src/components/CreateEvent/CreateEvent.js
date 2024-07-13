@@ -35,17 +35,16 @@ const CreateEvent = ({ onEventCreated }) => {
     try {
       await axios.post('/events/', eventData);
 
-      // Clear the form
       setTitle('');
       setDescription('');
       setDate('');
       setLocation('');
 
-      // Trigger a full page reload
-      window.location.reload();
+      if (onEventCreated) {
+        onEventCreated();
+      }
 
-      // If you prefer navigating to a specific route, you can use:
-      // navigate('/events');
+      navigate('/home');
     } catch (error) {
       console.error('Error creating event:', error);
       if (error.response) {

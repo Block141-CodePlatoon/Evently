@@ -35,7 +35,7 @@ const EventPage = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 404) {
-          navigate('/home'); 
+          navigate('/home'); // Redirect to home if event is not found
         }
       }
     };

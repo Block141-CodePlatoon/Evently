@@ -55,7 +55,7 @@ const EditEvent = ({ event, onEventEdited }) => {
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
-    dateInputRef.current.blur();  // Close the date picker by removing focus
+    dateInputRef.current.blur();
   };
 
   return (
@@ -109,7 +109,7 @@ const EditEvent = ({ event, onEventEdited }) => {
           variant="contained"
           color="primary"
           sx={{ bgcolor: 'primary' }}
-          style={{ color: 'black' }} // Set text color to black
+          style={{ color: 'black' }} 
         >
           Save Changes
         </Button>

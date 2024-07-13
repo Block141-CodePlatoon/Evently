@@ -1,8 +1,11 @@
-// components/CustomCalendar.js
-
 import React from 'react';
 import { Box, Grid, Typography, Paper, Button } from '@mui/material';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const CustomCalendar = ({ events, onDateSelect, selectedDate, onEventClick }) => {
   const [currentMonth, setCurrentMonth] = React.useState(dayjs().startOf('month'));
@@ -21,7 +24,7 @@ const CustomCalendar = ({ events, onDateSelect, selectedDate, onEventClick }) =>
   }
 
   const getEventsForDate = (date) => {
-    return events.filter(event => dayjs(event.date).isSame(date, 'day'));
+    return events.filter(event => dayjs(event.date).tz(dayjs.tz.guess()).isSame(date, 'day'));
   };
 
   const handlePrevMonth = () => {

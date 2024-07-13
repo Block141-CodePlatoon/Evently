@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -11,6 +11,7 @@ const EditEvent = ({ event, onEventEdited }) => {
   const [date, setDate] = useState('');
   const [location, setLocation] = useState(event.location);
   const navigate = useNavigate();
+  const dateInputRef = useRef(null);
 
   useEffect(() => {
     const formattedDate = dayjs(event.date).format('YYYY-MM-DDTHH:mm');
@@ -48,6 +49,15 @@ const EditEvent = ({ event, onEventEdited }) => {
     }
   };
 
+  const handleDateClick = () => {
+    dateInputRef.current.showPicker();
+  };
+
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+    dateInputRef.current.blur();
+  };
+
   return (
     <Box>
       <Typography variant="h4">Edit Event</Typography>
@@ -76,11 +86,13 @@ const EditEvent = ({ event, onEventEdited }) => {
             label="Date"
             type="datetime-local"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={handleDateChange}
             required
             InputLabelProps={{
               shrink: true,
             }}
+            inputRef={dateInputRef}
+            onClick={handleDateClick}
           />
         </Box>
         <Box mb={2}>
@@ -96,7 +108,8 @@ const EditEvent = ({ event, onEventEdited }) => {
           type="submit"
           variant="contained"
           color="primary"
-          sx={{ color: 'white' }}
+          sx={{ bgcolor: 'primary' }}
+          style={{ color: 'black' }} 
         >
           Save Changes
         </Button>

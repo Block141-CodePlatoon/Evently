@@ -1,5 +1,4 @@
-// components/CreateEvent/CreateEvent.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import axios from '../../axiosSetup';
 import { jwtDecode } from 'jwt-decode';
@@ -13,6 +12,7 @@ const CreateEvent = ({ onEventCreated }) => {
   const [location, setLocation] = useState('');
   const [host, setHost] = useState(null);
   const navigate = useNavigate();
+  const dateInputRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -59,6 +59,15 @@ const CreateEvent = ({ onEventCreated }) => {
     }
   };
 
+  const handleDateClick = () => {
+    dateInputRef.current.showPicker();
+  };
+
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+    dateInputRef.current.blur();  
+  };
+
   return (
     <Box>
       <Typography variant="h4">Create Event</Typography>
@@ -87,14 +96,13 @@ const CreateEvent = ({ onEventCreated }) => {
             label="Date"
             type="datetime-local"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={handleDateChange}
             required
             InputLabelProps={{
               shrink: true,
             }}
-            inputProps={{
-              placeholder: '',
-            }}
+            inputRef={dateInputRef}
+            onClick={handleDateClick}
           />
         </Box>
         <Box mb={2}>
@@ -110,7 +118,8 @@ const CreateEvent = ({ onEventCreated }) => {
           type="submit"
           variant="contained"
           color="primary"
-          sx={{ color: 'white' }}
+          sx={{ bgcolor: 'primary' }}
+          style={{ color: 'black' }} 
         >
           Create Event
         </Button>

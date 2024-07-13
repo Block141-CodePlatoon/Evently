@@ -14,8 +14,15 @@ import SidenavRoot from './SidenavRoot';
 import sidenavLogoLabel from './styles/sidenav';
 import { useMaterialUIController, setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from 'context';
 import EventPage from 'components/EventPage/EventPage';
-import Dashboard from 'layouts/dashboard';
 import NewEventsLayout from 'layouts/newevents';
+
+Sidenav.defaultProps = {
+  eventCreated: false,
+};
+
+Sidenav.propTypes = {
+  eventCreated: PropTypes.bool,
+};
 
 function Sidenav({ color, brand, brandName, routes, eventCreated, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();

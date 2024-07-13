@@ -36,7 +36,10 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     const credentials = {
       username: data.get('email'),
-      password: data.get('password'),
+      first_name: data.get('firstName'),
+      last_name: data.get('lastName'),
+      email: data.get('email'),
+      password1: data.get('password'),
       password2: data.get('password2'),
     };
 

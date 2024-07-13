@@ -6,6 +6,7 @@ import { isAuthenticated } from 'utils/auth';
 
 const PrivateRoute = ({ element }) => {
   const authStatus = isAuthenticated();
+  console.log('PrivateRoute isAuthenticated:', authStatus);
   return authStatus ? element : <Navigate to="/login" />;
 };
 

@@ -29,7 +29,7 @@ const routes = [
     ),
   },
   {
-    type: 'collapse',
+    type: 'route', // Correct type
     name: 'Event Page',
     key: 'event-page',
     icon: <Icon>event</Icon>,

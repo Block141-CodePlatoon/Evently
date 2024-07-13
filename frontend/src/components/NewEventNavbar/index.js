@@ -89,9 +89,6 @@ function NewEventNavbar({ absolute, light, isMini, eventName }) {
       sx={{ mt: 2 }}
     >
       <MenuItem onClick={handleCloseAccountMenu}>
-        <Icon>account_circle</Icon>&nbsp;Profile
-      </MenuItem>
-      <MenuItem onClick={handleCloseAccountMenu}>
         <Icon>settings</Icon>&nbsp;My account
       </MenuItem>
       <MenuItem onClick={handleLogout}>

@@ -20,6 +20,7 @@ import brandDark from 'assets/images/logo-ct-dark.svg';
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
 import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
+import MyAccount from 'components/MyAccount/MyAccount'; // Ensure correct path
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -123,6 +124,7 @@ export default function App() {
           {getRoutes(routes)}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/my-account" element={<PrivateRoute element={<MyAccount />} />} />
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </ThemeProvider>
@@ -139,7 +141,7 @@ export default function App() {
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
-            eventCreated={eventCreated}
+            eventCreated={handleEventCreated}
           />
           <Configurator />
           {configsButton}
@@ -150,6 +152,7 @@ export default function App() {
         {getRoutes(routes)}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/my-account" element={<PrivateRoute element={<MyAccount />} />} />
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </ThemeProvider>

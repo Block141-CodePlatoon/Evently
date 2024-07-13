@@ -70,7 +70,7 @@ function Sidenav({ color, brand, brandName, routes, eventCreated, ...rest }) {
 
   useEffect(() => {
     fetchUserEvents();
-  }, [eventCreated]); // Re-fetch events when eventCreated changes
+  }, [eventCreated]); 
 
   useEffect(() => {
     function handleMiniSidenav() {

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// components/DashboardNavbar/DashboardNavbar.js
+import React, { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
@@ -14,7 +15,7 @@ import { navbar, navbarContainer, navbarRow, navbarIconButton, navbarMobileMenu 
 import { useMaterialUIController, setTransparentNavbar, setMiniSidenav, setOpenConfigurator } from "context";
 import { logout } from 'utils/auth';
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, setViewingAccount }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
@@ -89,11 +90,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
       onClose={handleCloseAccountMenu}
       sx={{ mt: 2 }}
     >
-      <MenuItem onClick={handleCloseAccountMenu}>
-        <Icon>account_circle</Icon>&nbsp;Profile
-      </MenuItem>
-      <MenuItem onClick={handleCloseAccountMenu}>
-        <Icon>settings</Icon>&nbsp;My account
+      <MenuItem onClick={() => { handleCloseAccountMenu(); setViewingAccount(true); }}>
+        <Icon>account_circle</Icon>&nbsp;My account
       </MenuItem>
       <MenuItem onClick={handleLogout}>
         <Icon>logout</Icon>&nbsp;Logout
@@ -189,6 +187,7 @@ DashboardNavbar.propTypes = {
   absolute: PropTypes.bool,
   light: PropTypes.bool,
   isMini: PropTypes.bool,
+  setViewingAccount: PropTypes.func.isRequired,
 };
 
 export default DashboardNavbar;

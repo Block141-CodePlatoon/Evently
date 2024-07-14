@@ -4,7 +4,6 @@ services:
   api:
     build: ./backend
     dockerfile: Dockerfile
-    context: ./backend
     env_file:
       - ./backend/.env
     environment:

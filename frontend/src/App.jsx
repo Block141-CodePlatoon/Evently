@@ -153,7 +153,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/my-account" element={<PrivateRoute element={<MyAccount />} />} />
-        <Route path="*" element={<Navigate to="/home" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </ThemeProvider>
   );

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from .models import Event
 from .serializers import EventSerializer
-from .utils import send_email, get_directions
+# from .utils import send_email
 
 @permission_classes([IsAuthenticated])
 class EventList(APIView):
@@ -47,35 +47,18 @@ class EventDetail(APIView):
         return Response({"result": f"Event {pk} deleted"}, status=204)
     
 
-class SendEmailAPIView(APIView):
-    def post(self, request, pk):
-        event = get_object_or_404(Event, pk=pk)
-        guests = event.guests.all()
-        host_email = event.host.email
+# class SendEmailAPIView(APIView):
+#     def post(self, request, pk):
+#         event = get_object_or_404(Event, pk=pk)
+#         guests = event.guests.all()
+#         host_email = event.host.email
         
-        if not guests:
-            return Response({"error": "No guests found for this event."}, status=400)
+#         if not guests:
+#             return Response({"error": "No guests found for this event."}, status=400)
         
-        for guest in guests:
-            subject = f"Invitation to {event.title}"
-            content = f"Dear {guest.name},<br><br>You are invited to {event.title} on {event.date}.<br>Location: {event.location}.<br><br>Best regards,<br>{event.host.username}"
-            send_email(guest.email, subject, content, from_email=host_email)
+#         for guest in guests:
+#             subject = f"Invitation to {event.title}"
+#             content = f"Dear {guest.name},<br><br>You are invited to {event.title} on {event.date}.<br>Location: {event.location}.<br><br>Best regards,<br>{event.host.username}"
+#             send_email(guest.email, subject, content, from_email=host_email)
         
-        return Response({"message": "Emails sent successfully to all guests."}, status=200)
-
-
-class DirectionsAPIView(APIView):
-    def get(self, request, pk):
-        event = get_object_or_404(Event, pk=pk)
-        origin = event.location
-        destination = request.GET.get('destination')
-
-        if not destination:
-            return Response({"error": "Destination not provided."}, status=400)
-
-        directions = get_directions(origin, destination)
-        
-        if directions is None:
-            return Response({"error": "Failed to retrieve directions."}, status=500)
-        
-        return Response({"directions": directions}, status=200)
+#         return Response({"message": "Emails sent successfully to all guests."}, status=200)

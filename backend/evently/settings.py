@@ -2,6 +2,9 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from corsheaders.defaults import default_headers
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,17 +17,9 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
     },
 }
 
@@ -33,9 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Email settings
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -107,6 +102,15 @@ LOGOUT_REDIRECT_URL = '/'
 #     'http://localhost:3000',
 #     'http://127.0.0.1:3000',
 # ]
+
+# Email Config
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 465))
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
 ROOT_URLCONF = 'evently.urls'
 

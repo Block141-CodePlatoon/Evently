@@ -16,8 +16,8 @@ const CustomCalendar = ({ events, onDateSelect, selectedDate, onEventClick }) =>
   const endDate = endOfMonth.endOf('week');
 
   const dates = [];
-  let currentDate = startDate;
 
+  let currentDate = startDate;
   while (currentDate.isBefore(endDate)) {
     dates.push(currentDate);
     currentDate = currentDate.add(1, 'day');

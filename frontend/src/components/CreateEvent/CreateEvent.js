@@ -4,11 +4,13 @@ import axios from '../../axiosSetup';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 const CreateEvent = ({ onEventCreated }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [host, setHost] = useState(null);
   const navigate = useNavigate();
@@ -24,10 +26,14 @@ const CreateEvent = ({ onEventCreated }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Combine date and time correctly using dayjs
+    const combinedDateTime = dayjs(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format();
+
     const eventData = {
       title,
       description,
-      date,
+      date: combinedDateTime,
       location,
       host,
     };
@@ -38,6 +44,7 @@ const CreateEvent = ({ onEventCreated }) => {
       setTitle('');
       setDescription('');
       setDate('');
+      setTime('');
       setLocation('');
 
       if (onEventCreated) {
@@ -65,7 +72,10 @@ const CreateEvent = ({ onEventCreated }) => {
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
-    dateInputRef.current.blur();  
+  };
+
+  const handleTimeChange = (e) => {
+    setTime(e.target.value);
   };
 
   return (
@@ -94,7 +104,7 @@ const CreateEvent = ({ onEventCreated }) => {
           <TextField
             fullWidth
             label="Date"
-            type="datetime-local"
+            type="date"
             value={date}
             onChange={handleDateChange}
             required
@@ -103,6 +113,19 @@ const CreateEvent = ({ onEventCreated }) => {
             }}
             inputRef={dateInputRef}
             onClick={handleDateClick}
+          />
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Time"
+            type="time"
+            value={time}
+            onChange={handleTimeChange}
+            required
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Box>
         <Box mb={2}>

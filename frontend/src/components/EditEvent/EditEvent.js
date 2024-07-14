@@ -9,21 +9,27 @@ const EditEvent = ({ event, onEventEdited }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [location, setLocation] = useState(event.location);
   const navigate = useNavigate();
   const dateInputRef = useRef(null);
 
   useEffect(() => {
-    const formattedDate = dayjs(event.date).format('YYYY-MM-DDTHH:mm');
-    setDate(formattedDate);
+    const eventDate = dayjs(event.date);
+    setDate(eventDate.format('YYYY-MM-DD'));
+    setTime(eventDate.format('HH:mm'));
   }, [event.date]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Combine date and time into a single Date object
+    const combinedDateTime = dayjs(`${date}T${time}`).format();
+
     const updatedEvent = {
       title,
       description,
-      date,
+      date: combinedDateTime,
       location,
     };
 
@@ -55,7 +61,10 @@ const EditEvent = ({ event, onEventEdited }) => {
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
-    dateInputRef.current.blur();
+  };
+
+  const handleTimeChange = (e) => {
+    setTime(e.target.value);
   };
 
   return (
@@ -84,7 +93,7 @@ const EditEvent = ({ event, onEventEdited }) => {
           <TextField
             fullWidth
             label="Date"
-            type="datetime-local"
+            type="date"
             value={date}
             onChange={handleDateChange}
             required
@@ -93,6 +102,19 @@ const EditEvent = ({ event, onEventEdited }) => {
             }}
             inputRef={dateInputRef}
             onClick={handleDateClick}
+          />
+        </Box>
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Time"
+            type="time"
+            value={time}
+            onChange={handleTimeChange}
+            required
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Box>
         <Box mb={2}>

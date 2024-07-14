@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../axiosSetup'; // Ensure this path is correct
+import axios from '../../axiosSetup';
 import tiredImage from '../../assets/images/tired.webp';
 
 function Copyright(props) {
@@ -34,39 +34,39 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const navigate = useNavigate();
   const [showImage, setShowImage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setFormSubmitted(true); // Mark the form as submitted
     const data = new FormData(event.currentTarget);
     const credentials = {
       username: data.get('email'),
       password: data.get('password'),
     };
 
-    console.log('Form data:', data);
-    console.log('Credentials:', credentials);
-
     try {
-      console.log('Sending POST request to /api/token/');
-      const response = await axios.post('/api/token/', credentials);
-      console.log('Response received:', response);
+      const response = await axios.post('/token/', credentials);
 
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
-      console.log('Tokens stored and Authorization header set');
 
-      navigate('/home'); 
+      navigate('/home');
     } catch (error) {
       console.error('Login error:', error);
       if (error.response) {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
         console.error('Response headers:', error.response.headers);
+        setErrorMessage('No active account found with the given credentials.');
       } else if (error.request) {
         console.error('Request data:', error.request);
+        setErrorMessage('Unable to connect to the server.');
       } else {
         console.error('Error message:', error.message);
+        setErrorMessage('An unexpected error occurred.');
       }
     }
   };
@@ -157,6 +157,11 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
+              {formSubmitted && errorMessage && (
+                <Typography color="error" variant="body2">
+                  {errorMessage}
+                </Typography>
+              )}
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

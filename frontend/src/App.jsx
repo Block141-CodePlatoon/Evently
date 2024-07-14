@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,8 +19,8 @@ import brandWhite from 'assets/images/logo-ct.svg';
 import brandDark from 'assets/images/logo-ct-dark.svg';
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
-import NewEventLayout from 'layouts/newevents'; // Updated import
-import CreateEvent from 'components/CreateEvent/CreateEvent'; // Importing CreateEvent component
+import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
+import MyAccount from 'components/MyAccount/MyAccount';
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -37,6 +37,7 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  const [eventCreated, setEventCreated] = useState(false);
 
   useMemo(() => {
     const cacheRtl = createCache({
@@ -72,25 +73,32 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) => allRoutes.map((route) => {
-    if (route.collapse) {
-      return getRoutes(route.collapse);
-    }
+  const getRoutes = (allRoutes) =>
+    allRoutes.map((route) => {
+      if (route.collapse) {
+        return getRoutes(route.collapse);
+      }
 
-    if (route.route) {
-      return <Route exact path={route.route} element={route.component} key={route.key} />;
-    }
+      if (route.route) {
+        return <Route key={route.key} path={route.route} element={<PrivateRoute element={route.component} />} />;
+      }
 
-    return null;
-  });
+      return null;
+    });
 
   const configsButton = (
     <MDBox>
-      <Icon fontSize="small" color="inherit">settings</Icon>
+      <Icon fontSize="small" color="inherit">
+        settings
+      </Icon>
     </MDBox>
   );
 
   const shouldRenderSidenav = !['/login', '/signup'].includes(pathname);
+
+  const handleEventCreated = () => {
+    setEventCreated((prev) => !prev);
+  };
 
   return direction === 'rtl' ? (
     <CacheProvider value={rtlCache}>
@@ -101,10 +109,11 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName='Evently'
+              brandName="Evently"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
+              eventCreated={eventCreated}
             />
             <Configurator />
             {configsButton}
@@ -113,10 +122,10 @@ export default function App() {
         {layout === 'vr' && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='*' element={<Navigate to='/home' />} />
-          <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/my-account" element={<PrivateRoute element={<MyAccount />} />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -128,10 +137,11 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName='Evently'
+            brandName="Evently"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
+            eventCreated={handleEventCreated}
           />
           <Configurator />
           {configsButton}
@@ -140,10 +150,10 @@ export default function App() {
       {layout === 'vr' && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='*' element={<Navigate to='/home' />} />
-        <Route path='/create-event' element={<NewEventLayout><CreateEvent /></NewEventLayout>} /> {/* New Route */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/my-account" element={<PrivateRoute element={<MyAccount />} />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </ThemeProvider>
   );

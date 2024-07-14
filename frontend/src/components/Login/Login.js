@@ -34,9 +34,12 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const navigate = useNavigate();
   const [showImage, setShowImage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setFormSubmitted(true); // Mark the form as submitted
     const data = new FormData(event.currentTarget);
     const credentials = {
       username: data.get('email'),
@@ -57,10 +60,13 @@ export default function SignIn() {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
         console.error('Response headers:', error.response.headers);
+        setErrorMessage('No active account found with the given credentials.');
       } else if (error.request) {
         console.error('Request data:', error.request);
+        setErrorMessage('Unable to connect to the server.');
       } else {
         console.error('Error message:', error.message);
+        setErrorMessage('An unexpected error occurred.');
       }
     }
   };
@@ -151,6 +157,11 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
+              {formSubmitted && errorMessage && (
+                <Typography color="error" variant="body2">
+                  {errorMessage}
+                </Typography>
+              )}
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

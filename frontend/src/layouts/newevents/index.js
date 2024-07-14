@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Icon from '@mui/material/Icon'; 
@@ -36,6 +36,7 @@ function NewEventLayout2({ children }) {
   const [controller] = useMaterialUIController();
   const { id } = useParams();
   const [eventName, setEventName] = useState('');
+  const [eventLocation, setEventLocation] = useState('');
   const {
     transparentSidenav,
     whiteSidenav,
@@ -46,7 +47,9 @@ function NewEventLayout2({ children }) {
     const fetchEventData = async () => {
       try {
         const response = await axios.get(`/events/${id}/`);
-        setEventName(response.data.result.title);
+        const { title, location } = response.data.result;
+        setEventName(title);
+        setEventLocation(location);
       } catch (error) {
         console.error('Error fetching event data:', error);
       }
@@ -78,7 +81,20 @@ function NewEventLayout2({ children }) {
       >
         <NewEventNavbar eventName={eventName} /> 
         <Box component="main" flexGrow={1} p={3} mt={3}>
-          {React.cloneElement(children, { eventName })} 
+          {React.cloneElement(children, { eventName })}
+          {eventLocation && (
+            <Box mt={2} sx={{ position: 'relative', width: '100%', height: '400px' }}>
+              <Typography variant="h6">Event Location</Typography>
+              <iframe
+                width="100%"
+                height="100%"
+                style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(eventLocation)}`}
+              ></iframe>
+            </Box>
+          )}
         </Box>
         <Footer />
       </Box>

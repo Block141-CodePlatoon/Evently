@@ -83,15 +83,15 @@ function NewEventLayout2({ children }) {
         <Box component="main" flexGrow={1} p={3} mt={3}>
           {React.cloneElement(children, { eventName })}
           {eventLocation && (
-            <Box mt={2}>
+            <Box mt={2} sx={{ position: 'relative', width: '100%', height: '400px' }}>
               <Typography variant="h6">Event Location</Typography>
               <iframe
-                width="600"
-                height="450"
-                style={{ border: 0 }}
+                width="100%"
+                height="100%"
+                style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
                 loading="lazy"
                 allowFullScreen
-                src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(eventLocation)}`}
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(eventLocation)}`}
               ></iframe>
             </Box>
           )}

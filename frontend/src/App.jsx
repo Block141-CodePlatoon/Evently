@@ -20,7 +20,7 @@ import brandDark from 'assets/images/logo-ct-dark.svg';
 import Login from 'components/Login/Login';
 import Signup from 'components/Signup/Signup';
 import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
-import MyAccount from 'components/MyAccount/MyAccount'; // Ensure correct path
+import MyAccount from 'components/MyAccount/MyAccount';
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();

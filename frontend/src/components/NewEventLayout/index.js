@@ -1,49 +1,109 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Icon from '@mui/material/Icon'; 
+import NewEventNavbar from 'components/NewEventNavbar';
+import { useMaterialUIController } from 'context';
+import Footer from 'components/Footer';
+import Sidenav from 'components/Sidenav';
+import axios from '../../axiosSetup'; 
+import Dashboard from 'layouts/dashboard'; 
+import CreateEvent from 'components/CreateEvent/CreateEvent'; 
+import brandWhite from 'assets/images/logo-ct.svg';
+import brandDark from 'assets/images/logo-ct-dark.svg'; 
 
-// react-router-dom components
-import { useLocation } from "react-router-dom";
+const dummyRoutes = [
+  {
+    type: "collapse",
+    name: "Home",
+    key: "home",
+    icon: <Icon>home</Icon>,
+    route: "/home",
+    component: <Dashboard />, 
+  },
+  {
+    type: "collapse",
+    name: "Create Event",
+    key: "create-event",
+    icon: <Icon>add</Icon>,
+    route: "/create-event",
+    component: <CreateEvent />, 
+  },
+];
 
-// prop-types is a library for typechecking of props.
-import PropTypes from "prop-types";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React context
-import { useMaterialUIController, setLayout } from "context";
-
-function NewEventLayout({ children }) {
-  const [controller, dispatch] = useMaterialUIController();
-  const { miniSidenav } = controller;
-  const { pathname } = useLocation();
+function NewEventLayout2({ children }) {
+  const [controller] = useMaterialUIController();
+  const { id } = useParams();
+  const [eventName, setEventName] = useState('');
+  const [eventLocation, setEventLocation] = useState('');
+  const {
+    transparentSidenav,
+    whiteSidenav,
+    darkMode,
+  } = controller;
 
   useEffect(() => {
-    setLayout(dispatch, "new-event");
-  }, [pathname]);
+    const fetchEventData = async () => {
+      try {
+        const response = await axios.get(`/events/${id}/`);
+        const { title, location } = response.data.result;
+        setEventName(title);
+        setEventLocation(location);
+      } catch (error) {
+        console.error('Error fetching event data:', error);
+      }
+    };
+
+    if (id) {
+      fetchEventData();
+    }
+  }, [id]);
 
   return (
-    <MDBox
-      sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
-        p: 3,
-        position: "relative",
-
-        [breakpoints.up("xl")]: {
-          marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
-          transition: transitions.create(["margin-left", "margin-right"], {
-            easing: transitions.easing.easeInOut,
-            duration: transitions.duration.standard,
-          }),
-        },
-      })}
-    >
-      {children}
-    </MDBox>
+    <>
+      <Sidenav 
+        color="info" 
+        brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+        brandName="Evently"
+        routes={dummyRoutes} 
+      />
+      <Box
+        sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          marginLeft: pxToRem(120), 
+          [breakpoints.up('xl')]: {
+            marginLeft: pxToRem(274),
+          },
+        })}
+      >
+        <NewEventNavbar eventName={eventName} /> 
+        <Box component="main" flexGrow={1} p={3} mt={3}>
+          {React.cloneElement(children, { eventName })}
+          {eventLocation && (
+            <Box mt={2}>
+              <Typography variant="h6">Event Location</Typography>
+              <iframe
+                width="600"
+                height="450"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(eventLocation)}`}
+              ></iframe>
+            </Box>
+          )}
+        </Box>
+        <Footer />
+      </Box>
+    </>
   );
 }
 
-// Typechecking props for the NewEventLayout
-NewEventLayout.propTypes = {
+NewEventLayout2.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default NewEventLayout;
+export default NewEventLayout2;

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an instance of axios
 const instance = axios.create({
-  baseURL: 'http://localhost:8000/',
+  baseURL: 'http://localhost/api',
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true, // Ensure this is set to true to send cookies

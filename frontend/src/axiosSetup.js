@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-// Create an instance of axios
 const instance = axios.create({
   baseURL: 'http://localhost/api',
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true, // Ensure this is set to true to send cookies
+  withCredentials: true,
 });
 
-// Helper function to get the CSRF token from cookies
 const getCSRFToken = () => {
   const name = 'csrftoken';
   const cookieValue = document.cookie
@@ -18,15 +16,10 @@ const getCSRFToken = () => {
   return cookieValue;
 };
 
-// Add a request interceptor to include the token
 instance.interceptors.request.use(
   config => {
     const token = localStorage.getItem('access_token');
     const csrfToken = getCSRFToken();
-    
-    console.log('Request Interceptor:');
-    console.log('Access Token:', token);
-    console.log('CSRF Token:', csrfToken);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -41,7 +34,6 @@ instance.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle token refresh
 instance.interceptors.response.use(
   response => response,
   async error => {
@@ -52,7 +44,7 @@ instance.interceptors.response.use(
       const refreshToken = localStorage.getItem('refresh_token');
       if (refreshToken) {
         try {
-          const response = await axios.post('http://localhost:8000/api/token/refresh/', {
+          const response = await axios.post('http://localhost/api/token/refresh/', {
             refresh: refreshToken,
           });
           localStorage.setItem('access_token', response.data.access);

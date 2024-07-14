@@ -10,6 +10,8 @@ from django.views import View
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from .forms import CustomUserCreationForm
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(View):
@@ -19,17 +21,7 @@ class RegisterView(View):
         except json.JSONDecodeError:
             return HttpResponseBadRequest("Invalid JSON")
         
-        username = data.get('username')
-        password = data.get('password')
-        
-        if not username or not password:
-            return JsonResponse({"error": "Username and password are required"}, status=400)
-
-        form = UserCreationForm({
-            'username': username,
-            'password1': password,
-            'password2': password
-        })
+        form = CustomUserCreationForm(data)
         
         if form.is_valid():
             user = form.save()
@@ -43,10 +35,22 @@ class RegisterView(View):
             return JsonResponse(form.errors, status=400)
     
     def get(self, request):
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
         return render(request, 'accounts/register.html', {'form': form})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def protected_view(request):
     return Response({"message": "This is a protected view"})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_data(request):
+    user = request.user
+    user_data = {
+        "username": user.username,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+    }
+    return JsonResponse(user_data)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from '../../axiosSetup'; // Ensure this path is correct
+import axios from '../../axiosSetup';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
@@ -13,17 +13,23 @@ import SidenavCollapse from './SidenavCollapse';
 import SidenavRoot from './SidenavRoot';
 import sidenavLogoLabel from './styles/sidenav';
 import { useMaterialUIController, setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from 'context';
-import EventPage from 'components/EventPage/EventPage'; // Ensure correct path
-import CreateEvent from 'components/CreateEvent/CreateEvent'; // Ensure correct path
-import Dashboard from 'layouts/dashboard'; // Ensure correct path
-import NewEventsLayout from 'layouts/newevents'; // Ensure correct path
+import EventPage from 'components/EventPage/EventPage';
+import NewEventsLayout from 'layouts/newevents';
 
-function Sidenav({ color, brand, brandName, routes, ...rest }) {
+Sidenav.defaultProps = {
+  eventCreated: false,
+};
+
+Sidenav.propTypes = {
+  eventCreated: PropTypes.bool,
+};
+
+function Sidenav({ color, brand, brandName, routes, eventCreated, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const [userRoutes, setUserRoutes] = useState([]);
   const location = useLocation();
-  const collapseName = location.pathname.replace('/', '');
+  const currentRoute = location.pathname;
 
   let textColor = 'white';
 
@@ -34,6 +40,37 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
+
+  const fetchUserEvents = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('No token found in local storage');
+      return;
+    }
+
+    try {
+      const response = await axios.get('/events/');
+      const events = response.data.result.map(event => ({
+        type: 'collapse',
+        name: event.title,
+        key: event.id.toString(),
+        icon: <Icon>event</Icon>,
+        route: `/events/${event.id}`,
+        component: (
+          <NewEventsLayout>
+            <EventPage eventId={event.id} />
+          </NewEventsLayout>
+        ),
+      }));
+      setUserRoutes(events);
+    } catch (error) {
+      console.error('Error fetching user events:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserEvents();
+  }, [eventCreated]); 
 
   useEffect(() => {
     function handleMiniSidenav() {
@@ -49,40 +86,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     return () => window.removeEventListener('resize', handleMiniSidenav);
   }, [dispatch, location]);
 
-  useEffect(() => {
-    const fetchUserEvents = async () => {
-      const token = localStorage.getItem('access_token');
-      console.log('Token from local storage:', token); // Add this log to check the token
-      if (!token) {
-        console.error('No token found in local storage');
-        return;
-      }
-
-      try {
-        console.log('Sending GET request to /api/events/');
-        const response = await axios.get('/api/events/');
-        console.log('Response received:', response);
-        const events = response.data.result.map(event => ({
-          type: 'collapse',
-          name: event.title,  // Ensure the field names match your API response
-          key: event.id.toString(),
-          icon: <Icon>event</Icon>,
-          route: `/events/${event.id}`,
-          component: (
-            <NewEventsLayout>
-              <EventPage eventId={event.id} />
-            </NewEventsLayout>
-          ),
-        }));
-        setUserRoutes(events);
-      } catch (error) {
-        console.error('Error fetching user events:', error);
-      }
-    };
-
-    fetchUserEvents();
-  }, []);
-
   const renderRoutes = [
     ...routes,
     ...userRoutes,
@@ -92,11 +95,11 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     if (type === 'collapse') {
       returnValue = href ? (
         <Link href={href} key={key} target='_blank' rel='noreferrer' sx={{ textDecoration: 'none' }}>
-          <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
+          <SidenavCollapse name={name} icon={icon} active={currentRoute === route} />
         </Link>
       ) : (
         <NavLink key={key} to={route}>
-          <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
+          <SidenavCollapse name={name} icon={icon} active={currentRoute === route} />
         </NavLink>
       );
     } else if (type === 'title') {
@@ -179,7 +182,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           variant='gradient'
           color={sidenavColor}
           fullWidth
-          sx={{ color: 'white' }} // Change button text to white
+          sx={{ color: 'white' }}
         >
           upgrade to pro
         </MDButton>
@@ -198,6 +201,7 @@ Sidenav.propTypes = {
   brand: PropTypes.string,
   brandName: PropTypes.string.isRequired,
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  eventCreated: PropTypes.bool.isRequired, // Add the new prop
 };
 
 export default Sidenav;

@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from .models import Event
 from .serializers import EventSerializer
-# from .utils import send_email
 
 @permission_classes([IsAuthenticated])
 class EventList(APIView):
@@ -45,20 +44,3 @@ class EventDetail(APIView):
         event = get_object_or_404(Event.objects.filter(host=user), pk=pk)
         event.delete()
         return Response({"result": f"Event {pk} deleted"}, status=204)
-    
-
-# class SendEmailAPIView(APIView):
-#     def post(self, request, pk):
-#         event = get_object_or_404(Event, pk=pk)
-#         guests = event.guests.all()
-#         host_email = event.host.email
-        
-#         if not guests:
-#             return Response({"error": "No guests found for this event."}, status=400)
-        
-#         for guest in guests:
-#             subject = f"Invitation to {event.title}"
-#             content = f"Dear {guest.name},<br><br>You are invited to {event.title} on {event.date}.<br>Location: {event.location}.<br><br>Best regards,<br>{event.host.username}"
-#             send_email(guest.email, subject, content, from_email=host_email)
-        
-#         return Response({"message": "Emails sent successfully to all guests."}, status=200)

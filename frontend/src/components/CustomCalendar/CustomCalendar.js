@@ -3,6 +3,7 @@ import { Box, Grid, Typography, Paper, Button } from '@mui/material';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import './CustomCalendar.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,43 +36,46 @@ const CustomCalendar = ({ events, onDateSelect, selectedDate, onEventClick }) =>
     setCurrentMonth(currentMonth.add(1, 'month'));
   };
 
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" mb={2}>
+      <Box className="calendar-header">
         <Button onClick={handlePrevMonth}>Previous</Button>
         <Typography variant="h6">{currentMonth.format('MMMM YYYY')}</Typography>
         <Button onClick={handleNextMonth}>Next</Button>
       </Box>
       <Grid container spacing={1}>
+        {daysOfWeek.map((day) => (
+          <Grid item xs={12 / 7} key={day}>
+            <Box className="calendar-day">
+              <Typography variant="body1" align="right">{day}</Typography>
+            </Box>
+          </Grid>
+        ))}
         {dates.map((date, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+          <Grid item xs={12 / 7} key={index}>
             <Paper
               variant="outlined"
-              sx={{
-                height: '100%',
-                padding: 2,
-                cursor: 'pointer',
-                borderColor: date.isSame(selectedDate, 'day') ? 'blue' : 'transparent',
-                borderWidth: date.isSame(selectedDate, 'day') ? 2 : 1,
-                borderStyle: 'solid'
-              }}
+              className={`calendar-grid ${date.isSame(selectedDate, 'day') ? 'selected-date' : ''}`}
               onClick={() => onDateSelect(date)}
             >
-              <Typography variant="body1" color={date.isSame(dayjs(), 'day') ? 'primary' : 'textPrimary'}>
-                {date.format('D')}
-              </Typography>
+              <Box display="flex" justifyContent="flex-end" alignItems="center">
+                <Typography
+                  variant="body1"
+                  className={`day-number ${date.isSame(dayjs(), 'day') ? 'current-day' : date.month() !== currentMonth.month() ? 'non-current-day' : ''}`}
+                  align="right"
+                >
+                  {date.format('D')}
+                </Typography>
+              </Box>
               {getEventsForDate(date).map(event => (
                 <Typography
                   key={event.id}
                   variant="body2"
-                  sx={{
-                    cursor: 'pointer',
-                    '&:hover': {
-                      color: 'blue',
-                      textDecoration: 'underline',
-                    },
-                  }}
+                  className="event-title"
                   onClick={() => onEventClick(event.id)}
+                  align="right"
                 >
                   {event.title}
                 </Typography>
